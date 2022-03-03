@@ -1,5 +1,5 @@
 import tweepy
-from twitterDevCredentials import Credentials
+from API_classes.twitterDevCredentials import Credentials
 
 class TwitterScrap():
     def __init__(self):

@@ -1,4 +1,3 @@
-
 class Parser():
 
     def get_bgp_info_of_tweets(self,dic_info, user_tweets):

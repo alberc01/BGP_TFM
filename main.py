@@ -1,13 +1,12 @@
 from cmath import sin
 from importlib import import_module
-from twitter_class import TwitterScrap
-from gDrive_class import GoogleDriveApi
-from writer_class import Writer
-from parser_class import Parser
+from API_classes.twitter_class import TwitterScrap
+from API_classes.gDrive_class import GoogleDriveApi
+from API_classes.writer_class import Writer
+from API_classes.parser_class import Parser
 import os
 import json
 import datetime
-import iso8601
 
 class Main():
 
