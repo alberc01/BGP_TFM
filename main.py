@@ -4,9 +4,11 @@ from API_classes.twitter_class import TwitterScrap
 from API_classes.gDrive_class import GoogleDriveApi
 from API_classes.writer_class import Writer
 from API_classes.parser_class import Parser
+from API_classes.country_class import Country
 import os
 import json
 import datetime
+from collections import Counter
 
 class Main():
 
@@ -15,7 +17,14 @@ class Main():
         self.parser = Parser()
         self.writer = Writer()
         self.gdrive = GoogleDriveApi()
-    
+        self.country_info = Country()
+        self.bgp_info = self.get_BGP_data()
+
+    def get_BGP_data(self):
+        file, content = self.gdrive.download_file('1lLBCk9CxaCKLyOb8Wwagge05t6f-yNRc')
+        bgp_info = json.loads(content)
+        return bgp_info
+
     def store_inital_data(self):
         dic_info = {}
         user_tweets = self.scrapp.scrap_info_by_user("bgpstream")
@@ -93,8 +102,122 @@ class Main():
               
         return dict_data
 
+    def country_BGP_issues(self):
+        OT_dict = self.bgp_info['OT']
+        HJ_dict = self.bgp_info['HJ']
+
+        dict_by_country = {}
+
+        for item in OT_dict:
+
+            ctry= self.country_info.find_country_info(item['country'], item['id'])
+            ctry_key = ctry['ISO2'].values[0]
+            date = item['raw']['date']
+
+            if ctry_key in dict_by_country:
+
+                if date in dict_by_country[ctry_key]['OT_by_date']:
+                    dict_by_country[ctry_key]['OT_by_date'][date] += 1
+                else :
+                    dict_by_country[ctry_key]['OT_by_date'][date] = 1
+
+                dict_by_country[ctry_key]['OT_count'] += 1
+                issue_inf = {
+                        'text':item['raw']['text'],
+                        'issue_date': date
+                    }
+                dict_by_country[ctry_key]['issue'].append(issue_inf)
+                
+            else:
+                dict_by_country[ctry_key] = {
+                    'ctry_fullname': ctry['LIST NAME'].values[0],
+                    'OT_by_date': {date: 1},
+                    'OT_count': 1,
+                    'HJ_by_date': {'injured': {}, 'causer': {}},
+                    'HJ_count': {'injured_count': 0, 'causer_count':0},
+                    'issue':[{
+                        'text':item['raw']['text'],
+                        'issue_date':date
+                    }]
+                }
+
+
+        for item in HJ_dict:
+            date = item['raw']['date']
+
+            injured = item['injured']
+            ctry = self.country_info.find_country_info(injured['country'], 'ZZ')
+            ctry_key = ctry['ISO2'].values[0]
+            
+            if ctry_key in dict_by_country:
+                
+                if date in dict_by_country[ctry_key]['HJ_by_date']['injured']:
+                    dict_by_country[ctry_key]['HJ_by_date']['injured'][date] += 1
+                else :
+                    dict_by_country[ctry_key]['HJ_by_date']['injured'][date] = 1
+
+                dict_by_country[ctry_key]['HJ_count']['injured_count'] += 1
+
+                issue_inf = {
+                        'text':item['raw']['text'],
+                        'issue_date': date
+                    }
+                dict_by_country[ctry_key]['issue'].append(issue_inf)
+
+            else:
+                dict_by_country[ctry_key] = {
+                    'ctry_fullname': ctry['LIST NAME'].values[0],
+                    'OT_by_date': {},
+                    'OT_count': 0 ,
+                    'HJ_by_date': {'injured': {date: 1}, 'causer': {}},
+                    'HJ_count': {'injured_count': 1, 'causer_count':0} ,
+                    'issue':[{
+                        'text':item['raw']['text'],
+                        'issue_date': date
+                    }]
+                }
+
+            causer = item['causer']
+            ctry = self.country_info.find_country_info(causer['country'], 'ZZ')
+            ctry_key = ctry['ISO2'].values[0]
+
+            if ctry_key in dict_by_country:
+
+                if date in dict_by_country[ctry_key]['HJ_by_date']['causer']:
+                    dict_by_country[ctry_key]['HJ_by_date']['causer'][date] += 1
+                else :
+                    dict_by_country[ctry_key]['HJ_by_date']['causer'][date] = 1
+
+                dict_by_country[ctry_key]['HJ_count']['causer_count'] += 1
+                issue_inf = {
+                        'text':item['raw']['text'],
+                        'issue_date':item['raw']['date']
+                    }
+
+                dict_by_country[ctry_key]['issue'].append(issue_inf)
+
+            else:
+                dict_by_country[ctry_key] = {
+                    'ctry_fullname': ctry['LIST NAME'].values[0],
+                    'OT_by_date': {},
+                    'OT_count': 0 ,
+                    'HJ_by_date': {'injured':{}, 'causer': {date: 1}},
+                    'HJ_count': {'injured_count': 0, 'causer_count':1} ,
+                    'issue':[{
+                        'text':item['raw']['text'],
+                        'issue_date':item['raw']['date']
+                    }]
+                }
+
+        self.writer.write_dict_to_file("dict_by_country.json", dict_by_country)
+        return dict_by_country
+
+            
+
+        
 
 # Main().fix_dictionary_date()
 
 # Main().store_inital_data()
-Main().update_data()
+# Main().update_data()
+Main().country_BGP_issues()
