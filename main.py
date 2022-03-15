@@ -18,12 +18,15 @@ class Main():
         self.writer = Writer()
         self.gdrive = GoogleDriveApi()
         self.country_info = Country()
-        self.bgp_info = self.get_BGP_data()
+        self.bgp_info, self.from_available_date, self.to_available_date  = self.get_BGP_data()
+
 
     def get_BGP_data(self):
         file, content = self.gdrive.download_file('1lLBCk9CxaCKLyOb8Wwagge05t6f-yNRc')
         bgp_info = json.loads(content)
-        return bgp_info
+        from_ava_date = file['originalFilename'].replace(".json", "")
+        to_ava_date = bgp_info['recent_date']
+        return bgp_info, from_ava_date, to_ava_date
 
     def store_inital_data(self):
         dic_info = {}
@@ -139,7 +142,6 @@ class Main():
                     }]
                 }
 
-
         for item in HJ_dict:
             date = item['raw']['date']
 
@@ -207,10 +209,12 @@ class Main():
                     }]
                 }
 
+        dict_by_country['oldest_date'] = self.from_available_date
+        dict_by_country['most_recent_date'] = self.to_available_date
         self.writer.write_dict_to_file("dict_by_country.json", dict_by_country)
         return dict_by_country
     
 # Main().fix_dictionary_date()
 # Main().store_inital_data()
 # Main().update_data()
-# Main().country_BGP_issues()
+Main().country_BGP_issues()

@@ -15,11 +15,13 @@ from matplotlib.backends.backend_tkagg import (
 from ttkwidgets.autocomplete import AutocompleteEntryListbox
 from uritemplate import expand
 from tkcalendar import Calendar, DateEntry
+import datetime
+
 
 class Graphics(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.country_data, self.ot_data = self.readJson()
+        self.country_data, self.ot_data, self.o_date, self.r_date = self.readJson()
         self.mainframe = Frame(self)
         self.mainframe.columnconfigure(0, weight=1)
         self.mainframe.columnconfigure(1, weight=3)
@@ -39,11 +41,15 @@ class Graphics(tk.Tk):
         country = []
         ot_data = []
 
-        for k in data.keys():
-            country.append(data[k]['ctry_fullname'])
-            ot_data.append(data[k]['OT_count'])
+        recent_date= datetime.datetime.strptime(data['most_recent_date'], '%Y-%m-%d %H:%M:%S%z')
+        oldest_date= datetime.datetime.strptime(data['oldest_date'], '%Y-%m-%d %H:%M:%S%z')
 
-        return country, ot_data
+        for k in data.keys():
+            if k not in ["oldest_date", "most_recent_date"]:
+                country.append(data[k]['ctry_fullname'])
+                ot_data.append(data[k]['OT_count'])
+
+        return country, ot_data, oldest_date, recent_date
 
     def autocomplete_country_combo_widget(self):
 
@@ -128,10 +134,18 @@ class Graphics(tk.Tk):
                 font = ('Times',21),
                 text='From date',
         ).pack()
-        cal = DateEntry(self.date_from_frame ,
-                    font="Times 18", selectmode='day',
-                    cursor="hand1", year=2018, month=2, day=5)
-        cal.pack()
+        self.from_cal = DateEntry(self.date_from_frame ,
+                    font="Times 18",
+                    selectmode='day',
+                    cursor="hand1", 
+                    year=self.o_date.year,
+                    month=self.o_date.month,
+                    day=self.o_date.day,
+                    mindate = self.o_date,
+                    maxdate = self.r_date
+                    )
+        self.from_cal.pack()
+ 
         
     def to_date_selector_widget(self):
 
@@ -143,10 +157,16 @@ class Graphics(tk.Tk):
                 font = ('Times',21),
                 text='To date',
         ).pack()
-        cal2 = DateEntry(self.date_to_frame ,
-                    font="Times 18", selectmode='day',
-                    cursor="hand1", year=2018, month=2, day=5)
-        cal2.pack()
+        self.to_cal = DateEntry(self.date_to_frame ,
+                    font="Times 18",
+                    selectmode='day',
+                    cursor="hand1",
+                    year=self.r_date.year,
+                    month=self.r_date.month,
+                    day=self.r_date.day,
+                    mindate = self.o_date,
+                    maxdate = self.r_date)
+        self.to_cal.pack()
 
     def add_to_country_list(self):
         v = self.autocomplete_entry.get()
@@ -172,11 +192,11 @@ class Graphics(tk.Tk):
             c_idx = self.country_data.index(i)
             dataY.append(self.ot_data[c_idx])
             
-
         try:
             self.axes.remove()
         except:
             pass
+        
         self.axes = self.figure.add_subplot()
         self.axes.bar(dataX, dataY)
         self.axes.set_ylabel("Number of Outages")
