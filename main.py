@@ -83,8 +83,6 @@ class Main():
 
         return dict_info
 
-
-
     def update_data(self):
         
         file, content = self.gdrive.download_file('1lLBCk9CxaCKLyOb8Wwagge05t6f-yNRc')
@@ -213,11 +211,8 @@ class Main():
         return dict_by_country
 
             
-
-        
-
 # Main().fix_dictionary_date()
 
 # Main().store_inital_data()
 # Main().update_data()
-Main().country_BGP_issues()
+# Main().country_BGP_issues()
