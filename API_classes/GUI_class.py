@@ -23,8 +23,6 @@ class Graphics(tk.Tk):
         self.mainframe = Frame(self)
         self.mainframe.columnconfigure(0, weight=1)
         self.mainframe.columnconfigure(1, weight=3)
-
-
         country = []
         ot_data = []
         self.mainframe.pack()
@@ -32,15 +30,7 @@ class Graphics(tk.Tk):
         self.country_entry = None
         self.figure = None
         
-        self.autocomplete_country_combo()
-
-    #     self.nrows = 2
-    #     self.ncols = 2
-    #     for i in range(self.nrows):
-    #         self.grid_rowconfigure(i, weight=1)
-    #         self.grid_columnconfigure(i, weight=1)
-    #     # self.resizable(0,0)
-    # #     self.fig = plt.figure()
+        self.GUI_main_frame()
     
     def readJson(self):
         with open('dict_by_country.json')as json_file:
@@ -55,19 +45,14 @@ class Graphics(tk.Tk):
 
         return country, ot_data
 
+    def autocomplete_country_combo_widget(self):
 
-    def autocomplete_country_combo(self):
-
-        self.geometry("1920x700")
-        self.title("Sistema de recomendacion de politicas de trafico BGP")
-
-
-        self.frame = Frame(self.mainframe, bg='#f25252')
+        self.frame = Frame(self.mainframe, bg='steel blue')
         self.frame.grid(row=0, column=0, sticky= tk.NS)
 
         Label(
             self.frame, 
-            bg='#f25252',
+            bg='steel blue',
             font = ('Times',21),
             text='Countries to select',
             ).grid(row=0, column=0, sticky= tk.NS)
@@ -81,13 +66,12 @@ class Graphics(tk.Tk):
         self.autocomplete_entry.grid(row=1, column=0, sticky= tk.NS)
 
 
-        self.country_list_frame  = Frame(self.mainframe, bg='#f25252')
+        self.country_list_frame  = Frame(self.mainframe, bg='steel blue')
         self.country_list_frame.grid(row=0, column=1, sticky= tk.NS)
         
-
         Label(
                 self.country_list_frame,
-                bg='#f25252',
+                bg='steel blue',
                 font = ('Times',21),
                 text='Countries selected',
         ).grid(row=0, column=0)
@@ -107,7 +91,7 @@ class Graphics(tk.Tk):
             font=('Times', 18),
             text = "Add to Country List",
             command= self.add_to_country_list,
-            bg='#f25252',
+            bg='steel blue',
             ).grid(row=1, column=0)
         
         Button(
@@ -116,13 +100,11 @@ class Graphics(tk.Tk):
             font=('Times', 18),
             text = "Delete from Country List",
             command= self.remove_from_country_list,
-            bg='#f25252',
+            bg='steel blue',
             ).grid(row=1, column=1)
-
-        self.from_date_selector()
-        self.to_date_selector()      
-
-        self.figure = Figure(figsize = (6,4), dpi = 100)
+    
+    def plot_widget(self):
+        self.figure = Figure(figsize = (6,4), dpi = 200)
         canvas_figure = FigureCanvasTkAgg(self.figure, self)
         NavigationToolbar2Tk(canvas_figure, self)
         canvas_figure.get_tk_widget().pack(side = tk.TOP, fill = tk.BOTH, expand = 1)
@@ -133,17 +115,16 @@ class Graphics(tk.Tk):
             font=('Times', 18),
             text = "Show plot",
             command= lambda: self.show_plot(canvas_figure),
-            bg='#f25252',
+            bg='steel blue',
             pady= 2
         ).grid(row=1, column=2, columnspan= 2, sticky= tk.NS)
 
-
-    def from_date_selector(self):
+    def from_date_selector_widget(self):
         self.date_from_frame  = Frame(self.mainframe)
         self.date_from_frame.grid(row=0, column=2, sticky= tk.NS)
         Label(
                 self.date_from_frame,
-                bg='#f25252',
+                bg='steel blue',
                 font = ('Times',21),
                 text='From date',
         ).pack()
@@ -152,13 +133,13 @@ class Graphics(tk.Tk):
                     cursor="hand1", year=2018, month=2, day=5)
         cal.pack()
         
-    def to_date_selector(self):
+    def to_date_selector_widget(self):
 
         self.date_to_frame  = Frame(self.mainframe)
         self.date_to_frame.grid(row=0, column=3, sticky= tk.NS)
         Label(
                 self.date_to_frame,
-                bg='#f25252',
+                bg='steel blue',
                 font = ('Times',21),
                 text='To date',
         ).pack()
@@ -167,9 +148,6 @@ class Graphics(tk.Tk):
                     cursor="hand1", year=2018, month=2, day=5)
         cal2.pack()
 
-
-
-    
     def add_to_country_list(self):
         v = self.autocomplete_entry.get()
 
@@ -186,11 +164,6 @@ class Graphics(tk.Tk):
 
             self.autocomplete_out.configure(completevalues = self.country_list)
 
-        # y_pos = np.arange(len(country))
-        # plt.bar(y_pos, ot_data)
-        # plt.xticks(y_pos, country )
-        # plt.show()
-        # plt.savefig('prueba.png')
     def show_plot(self,canvas):
         dataX = self.country_list
 
@@ -209,8 +182,6 @@ class Graphics(tk.Tk):
         self.axes.set_ylabel("Number of Outages")
         canvas.draw()
 
-        
-
     def search_items(self):
         search_value = self.country_entry.get()
         if search_value == "" or search_value == " ":
@@ -223,5 +194,12 @@ class Graphics(tk.Tk):
             
             self.combo['values'] = value_to_display
 
+    def GUI_main_frame(self):
+        self.geometry("1900x1060")
+        self.title("Sistema de recomendacion de politicas de trafico BGP")
+        self.autocomplete_country_combo_widget()
+        self.from_date_selector_widget()
+        self.to_date_selector_widget()  
+        self.plot_widget()  
     
 Graphics().mainloop()
