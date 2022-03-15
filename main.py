@@ -209,10 +209,8 @@ class Main():
 
         self.writer.write_dict_to_file("dict_by_country.json", dict_by_country)
         return dict_by_country
-
-            
+    
 # Main().fix_dictionary_date()
-
 # Main().store_inital_data()
 # Main().update_data()
 # Main().country_BGP_issues()
