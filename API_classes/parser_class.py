@@ -1,5 +1,5 @@
 class Parser():
-
+    # Funcion para clasificar el tipo de tramas publicadas en twitter de caracter BGP
     def get_bgp_info_of_tweets(self,dic_info, user_tweets):
         cont = 0
 
