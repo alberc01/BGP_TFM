@@ -119,153 +119,410 @@ class Main():
               
         return dict_data
 
-    def country_BGP_issues(self):
-        OT_dict = self.bgp_info['OT']
-        HJ_dict = self.bgp_info['HJ']
-
-        dict_by_country = {}
-
-        for item in OT_dict:
-
-            # ctry= self.country_info.find_country_info(item['country'], item['id']).
+    # Funcion para poblar el diccionario formateado de la informacion de caidas de servicio
+    def populate_OT_info(self, OT_dict, out_dict):
+        # Poblar el diccionario con la informacion de caidas
+        for item in OT_dict:            
+            # Llamada para averiguar el pais del asn correspondiente
             ctry= self.country_info.find_country_info_V2(item['id'], item['country'])
+            # Obtencion del nombre del pais en funcion del codigo en formato ISO2
             ctry_key = ctry['ISO2'].values[0]
+            # Obtencion de la fecha del problema
             date = item['raw']['date']
-            if str(date) == '2022-01-27 00:07:16+00:00':
-                print('aqui')
 
-            if ctry_key == '' or ctry_key == ' ':
-                print('aqui') 
+            # Si el pais se encontraba en el diccionario
+            if ctry_key in out_dict:
+                # Creamos la informacion del problema para asignarlo segun la fecha
+                date_inf_ot = {'count': 1,
+                                'ctry':ctry_key,
+                                'ASN': 'AS' + item['id']
+                }
 
-            if ctry_key in dict_by_country:
-
-                if date in dict_by_country[ctry_key]['OT_by_date']:
-                    dict_by_country[ctry_key]['OT_by_date'][date] += 1
+                # Si ya existia algun problema en esa fecha concatenamos la nueva
+                if date in out_dict[ctry_key]['OT_by_date']:
+                    out_dict[ctry_key]['OT_by_date'][date].append(date_inf_ot)
+                # Si la fecha no existe creamos el array correspondiente con la informacion pertinente
                 else :
-                    dict_by_country[ctry_key]['OT_by_date'][date] = 1
+                    out_dict[ctry_key]['OT_by_date'][date] = [date_inf_ot]
 
-                dict_by_country[ctry_key]['OT_count'] += 1
+                # Aumentamos el numero de incidencias de OT del pais
+                out_dict[ctry_key]['OT_count'] += 1
+
+                # Mantenemos un backlog de OT por lo que pueda pasar
                 issue_inf = {
                         'text':item['raw']['text'],
                         'issue_date': date
                     }
-                dict_by_country[ctry_key]['issue'].append(issue_inf)
-                
+                # Concatenamos al backlog OT el problema 
+                out_dict[ctry_key]['issue_ot'].append(issue_inf)
+
+             # Si el pais no se encontraba en el diccionario  
             else:
-                dict_by_country[ctry_key] = {
+                # Creamos la informacion relevante por fecha
+                date_inf_ot = {'count': 1,
+                                'ctry':ctry_key,
+                                'ASN': 'AS' + item['id']
+                               }
+
+                # Poblamos la informacion incial que almacenaremos de cada pais
+                out_dict[ctry_key] = {
                     'ctry_fullname': ctry['LIST NAME'].values[0],
-                    'OT_by_date': {date: 1},
+                    'OT_by_date': {date : [date_inf_ot]},
                     'OT_count': 1,
                     'HJ_by_date': {'injured': {}, 'causer': {}},
                     'HJ_count': {'injured_count': 0, 'causer_count':0},
                     'HJ_autosabotage': {},
-                    'issue':[{
+                    'issue_ot':[{
                         'text':item['raw']['text'],
                         'issue_date':date
-                    }]
+                    }],
+                    'issue_hj':{
+                            'inju': [],
+                            'causer': []
+                            }
                 }
 
-        for item in HJ_dict:
-            date = item['raw']['date']
-            if str(date) == '2022-01-27 00:07:16+00:00':
-                print('aqui')
+        return out_dict
 
+    # Funcion para poblar el diccionario formateado de la informacion de secuestros
+    def populate_HJ_info(self, HJ_dict, out_dict):
+
+        # Poblar el diccionario de salida con la informacion de secuestros
+        for item in HJ_dict:
+            # Obtenemos la fecha del problema BGP
+            date = item['raw']['date']
+
+            # Obtenemos el pais perjudicado
             injured = item['injured']
             inj_ctry = self.country_info.find_country_info_V2(injured['issue'],injured['country'])
             inj_ctry_key = inj_ctry['ISO2'].values[0]
+            # Obtenemos el asn del pais perjudicado
+            inj_asn = self.country_info.get_asn_from_string(injured['issue'])
 
+            # Obtenemos el pais causante
             causer = item['causer']
             cau_ctry = self.country_info.find_country_info_V2(causer['company'],causer['country'])
             cau_ctry_key = cau_ctry['ISO2'].values[0]
+            cau_asn = self.country_info.get_asn_from_string(causer['company'])
 
-            if cau_ctry_key == '' or inj_ctry_key == '':
-                print('aqui')
-
+            # Si el pais causante es disntinto del pais perjudicado
             if inj_ctry_key != cau_ctry_key:
-                if inj_ctry_key in dict_by_country:
-                    
-                    if date in dict_by_country[inj_ctry_key]['HJ_by_date']['injured']:
-                        dict_by_country[inj_ctry_key]['HJ_by_date']['injured'][date].append([1,cau_ctry_key])
+
+                ## POBLAMOS LA INFORMACION DEL PERJUDICADO ##
+                # Si el pais se encuntra en el diccionario
+                if inj_ctry_key in out_dict:
+                    # Creamos la informacion relevante del problema que sera almacenado por fecha
+                    date_inf_hj = {
+                        'ctry_inj': inj_ctry_key,
+                        'ctry_cau': cau_ctry_key,
+                        'ASN_cau': cau_asn,
+                        'ASN_inj': inj_asn
+                    }
+                    # Si ya existia algun problema con la misma fecha lo concatenamos a la lista 
+                    if date in out_dict[inj_ctry_key]['HJ_by_date']['injured']:
+                        out_dict[inj_ctry_key]['HJ_by_date']['injured'][date].append(date_inf_hj)
+                    # Si no existia ningun problema con esa fecha inicializamos el diccionario con la informacion correspondiente
                     else :
-                        dict_by_country[inj_ctry_key]['HJ_by_date']['injured'][date] = [[1,cau_ctry_key]]
+                        out_dict[inj_ctry_key]['HJ_by_date']['injured'][date] = [date_inf_hj]
 
-                    dict_by_country[inj_ctry_key]['HJ_count']['injured_count'] += 1
-
+                    # Aumentamos el numero de problemas de ese pais como perjudicado
+                    out_dict[inj_ctry_key]['HJ_count']['injured_count'] += 1
+                    
+                    # Mantenemos un backlog de HJ con el problema por lo que pueda pasar
                     issue_inf = {
                             'text':item['raw']['text'],
                             'issue_date': date
                         }
-                    dict_by_country[inj_ctry_key]['issue'].append(issue_inf)
-
+                    # Concatenamos el problema al backlog de HJ
+                    out_dict[inj_ctry_key]['issue_hj']['inju'].append(issue_inf)
+                # Si el pais no se encuntra en el diccionario
                 else:
-                    dict_by_country[inj_ctry_key] = {
+                    # Creamos la informacion relevante del problema que sera almacenado por fecha
+                    date_inf_hj = {
+                        'ctry_inj': inj_ctry_key,
+                        'ctry_cau': cau_ctry_key,
+                        'ASN_cau': cau_asn,
+                        'ASN_inj': inj_asn
+                    }
+
+                    # Poblamos la informacion incial que almacenaremos de cada pais
+                    out_dict[inj_ctry_key] = {
                         'ctry_fullname': inj_ctry['LIST NAME'].values[0],
                         'OT_by_date': {},
                         'OT_count': 0 ,
-                        'HJ_by_date': {'injured': {date: [[1,cau_ctry_key]]}, 'causer': {}},
+                        'HJ_by_date': {'injured': {date: [date_inf_hj]},
+                                       'causer': {}},
                         'HJ_count': {'injured_count': 1, 'causer_count':0} ,
                         'HJ_autosabotage': {},
-                        'issue':[{
-                            'text':item['raw']['text'],
-                            'issue_date': date
-                        }]
+                        'issue_ot':[],
+                        'issue_hj':{
+                            'inju': [{'text':item['raw']['text'],'issue_date': date}],
+                            'causer': []
+                        }
                     }
 
-                if cau_ctry_key in dict_by_country:
-
-                    if date in dict_by_country[cau_ctry_key]['HJ_by_date']['causer']:
-                        dict_by_country[cau_ctry_key]['HJ_by_date']['causer'][date].append([1,inj_ctry_key])
+                ## POBLAMOS LA INFORMACION DEL CAUSANTE ##
+                # Si el pais se encuntra en el diccionario
+                if cau_ctry_key in out_dict:
+                    # Creamos la informacion relevante del problema que sera almacenado por fecha
+                    date_inf_hj = {
+                        'ctry_inj': inj_ctry_key,
+                        'ctry_cau': cau_ctry_key,
+                        'ASN_cau': cau_asn,
+                        'ASN_inj': inj_asn
+                    }
+                    # Si ya existia algun problema con la misma fecha lo concatenamos a la lista       
+                    if date in out_dict[cau_ctry_key]['HJ_by_date']['causer']:
+                        out_dict[cau_ctry_key]['HJ_by_date']['causer'][date].append(date_inf_hj)
+                    # Si no existia ningun problema con esa fecha inicializamos el diccionario con la informacion correspondiente
                     else :
-                        dict_by_country[cau_ctry_key]['HJ_by_date']['causer'][date] = [[1,inj_ctry_key]]
+                        out_dict[cau_ctry_key]['HJ_by_date']['causer'][date] = [date_inf_hj]
+                    # Aumentamos el contador del pais como causante de secuestros
+                    out_dict[cau_ctry_key]['HJ_count']['causer_count'] += 1
 
-                    dict_by_country[cau_ctry_key]['HJ_count']['causer_count'] += 1
+                    # Mantenemos un backlog por lo que pueda pasar
                     issue_inf = {
                             'text':item['raw']['text'],
                             'issue_date':item['raw']['date']
                         }
-
-                    dict_by_country[cau_ctry_key]['issue'].append(issue_inf)
-
+                    # Concatemos el problema al backlog correspondiente
+                    out_dict[cau_ctry_key]['issue_hj']['causer'].append(issue_inf)
+                # Si el pais no se encuentra en el diccionario
                 else:
-                    dict_by_country[cau_ctry_key] = {
+                    # Creamos la informacion relevante del problema que sera almacenado por fecha
+                    date_inf_hj = {
+                        'ctry_inj': inj_ctry_key,
+                        'ctry_cau': cau_ctry_key,
+                        'ASN_cau': cau_asn,
+                        'ASN_inj': inj_asn
+                    }
+
+                    # Poblamos la informacion incial que almacenaremos de cada pais
+                    out_dict[cau_ctry_key] = {
                         'ctry_fullname': cau_ctry['LIST NAME'].values[0],
                         'OT_by_date': {},
                         'OT_count': 0 ,
-                        'HJ_by_date': {'injured':{}, 'causer': {date: [[1,inj_ctry_key]]}},
+                        'HJ_by_date': {'injured':{},
+                                       'causer': {date: [date_inf_hj]}},
                         'HJ_count': {'injured_count': 0, 'causer_count':1} ,
                         'HJ_autosabotage': {},
-                        'issue':[{
-                            'text':item['raw']['text'],
-                            'issue_date':item['raw']['date']
-                        }]
+                        'issue_ot':[],
+                        'issue_hj':{
+                            'inju': [],
+                            'causer': [{'text':item['raw']['text'],'issue_date': date}]
+                        }
                     }
+            
+            # Si el causante y el perjudicado son los mismos se califica como autosabotaje
             else:
-                if cau_ctry_key in dict_by_country:
-                    if date in dict_by_country[inj_ctry_key]['HJ_autosabotage']:
-                        dict_by_country[inj_ctry_key]['HJ_autosabotage'][date] += 1
+                # Si el pais ya se encontraba en el diccionario
+                if cau_ctry_key in out_dict:
+                    # Creamos el diccionario con la informacion que se busca almacenar
+                    date_inf_hj = {
+                        'ctry_inj': inj_ctry_key,
+                        'ctry_cau': cau_ctry_key,
+                        'ASN_cau': cau_asn,
+                        'ASN_inj': inj_asn
+                    }
+                    # Si ya habia algun problema en esa fecha concatenamos la nueva
+                    if date in out_dict[inj_ctry_key]['HJ_autosabotage']:
+                        out_dict[inj_ctry_key]['HJ_autosabotage'][date].append(date_inf_hj)
+                    # Si no habia ningun problema todavia, inicializamos el array con la informacion correspondiente
                     else:
-                        dict_by_country[inj_ctry_key]['HJ_autosabotage'][date] = 1
+                        out_dict[inj_ctry_key]['HJ_autosabotage'][date] = [date_inf_hj]
+                # Si el pais no se encontraba en el diccionario todavia
                 else:
-                    dict_by_country[cau_ctry_key] = {
-                        'ctry_fullname': cau_ctry['LIST NAME'].values[0],
+                    # Poblamos la informacion incial que almacenaremos de cada pais
+                    out_dict[inj_ctry_key] = {
+                        'ctry_fullname': inj_ctry['LIST NAME'].values[0],
                         'OT_by_date': {},
                         'OT_count': 0 ,
                         'HJ_by_date': {'injured':{}, 'causer': {}},
                         'HJ_count': {'injured_count': 0, 'causer_count':0} ,
-                        'HJ_autosabotage': {date: 1},
-                        'issue':[{
-                            'text':item['raw']['text'],
-                            'issue_date':item['raw']['date']
-                        }]
+                        'HJ_autosabotage': {date : [date_inf_hj]},
+                        'issue_ot':[],
+                        'issue_hj':{
+                            'inju': [],
+                            'causer': []
+                        }
                     }
-                
+    
+    # Funcion para poblar el diccionario formateado para la aplicacion
+    def save_BGP_issues_by_country(self):
+        # Diccionario con la informacion de cortes de servicio
+        OT_dict = self.bgp_info['OT']
+        # Diccionario con la informacion de secuestros
+        HJ_dict = self.bgp_info['HJ']
+        
+        # Diccionario auxiliar donde guardaremos la informacion
+        dict_by_country = {}
 
+        # Poblar el diccionario con la informacion de caidas
+        dict_by_country = self.populate_OT_info(OT_dict, dict_by_country)
+        # Poblar el diccionario con la informacion de secuestros
+        dict_by_country = self.populate_HJ_info(HJ_dict, dict_by_country)
+
+        # Escritura en el diccionario de las fechas reciente y antigua
         dict_by_country['oldest_date'] = self.from_available_date
         dict_by_country['most_recent_date'] = self.to_available_date
+
+        # Escritura del diccionario en un archivo de backup
         self.writer.write_dict_to_file("dict_by_country_v2.json", dict_by_country)
+
+                                                                                                                            # # Poblar el diccionario con la informacion de caidas
+                                                                                                                            # for item in OT_dict:            
+                                                                                                                            #     # Llamada para averiguar el pais del asn correspondiente
+                                                                                                                            #     ctry= self.country_info.find_country_info_V2(item['id'], item['country'])
+                                                                                                                            #     # Obtencion del nombre del pais en funcion del codigo en formato ISO2
+                                                                                                                            #     ctry_key = ctry['ISO2'].values[0]
+                                                                                                                            #     date = item['raw']['date']
+
+                                                                                                                            #     if ctry_key in dict_by_country:
+                                                                                                                            #         date_inf_ot = {'count': 1,
+                                                                                                                            #                         'ctry':ctry_key,
+                                                                                                                            #                         'ASN': 'AS' + item['id']
+                                                                                                                            #         }
+                                                                                                                            #         if date in dict_by_country[ctry_key]['OT_by_date']:
+                                                                                                                            #             dict_by_country[ctry_key]['OT_by_date'][date].append(date_inf_ot)
+                                                                                                                            #         else :
+                                                                                                                            #             dict_by_country[ctry_key]['OT_by_date'][date] = [date_inf_ot]
+
+                                                                                                                            #         dict_by_country[ctry_key]['OT_count'] += 1
+                                                                                                                            #         issue_inf = {
+                                                                                                                            #                 'text':item['raw']['text'],
+                                                                                                                            #                 'issue_date': date
+                                                                                                                            #             }
+                                                                                                                            #         dict_by_country[ctry_key]['issue'].append(issue_inf)
+                                                                                                                                    
+                                                                                                                            #     else:
+                                                                                                                            #         date_inf_ot = {'count': 1,
+                                                                                                                            #                         'ctry':ctry_key,
+                                                                                                                            #                         'ASN': 'AS' + item['id']
+                                                                                                                            #                        }
+                                                                                                                            #         dict_by_country[ctry_key] = {
+                                                                                                                            #             'ctry_fullname': ctry['LIST NAME'].values[0],
+                                                                                                                            #             'OT_by_date': {[date_inf_ot]},
+                                                                                                                            #             'OT_count': 1,
+                                                                                                                            #             'HJ_by_date': {'injured': {}, 'causer': {}},
+                                                                                                                            #             'HJ_count': {'injured_count': 0, 'causer_count':0},
+                                                                                                                            #             'HJ_autosabotage': {},
+                                                                                                                            #             'issue':[{
+                                                                                                                            #                 'text':item['raw']['text'],
+                                                                                                                            #                 'issue_date':date
+                                                                                                                            #             }]
+                                                                                                                            #         }
+
+        # # Poblar el diccionario con la informacion de secuestros
+        # for item in HJ_dict:
+        #     # Obtenemos la fecha del problema BGP
+        #     date = item['raw']['date']
+
+        #     # Obtenemos el pais perjudicado
+        #     injured = item['injured']
+        #     inj_ctry = self.country_info.find_country_info_V2(injured['issue'],injured['country'])
+        #     inj_ctry_key = inj_ctry['ISO2'].values[0]
+
+        #     # Obtenemos el pais causante
+        #     causer = item['causer']
+        #     cau_ctry = self.country_info.find_country_info_V2(causer['company'],causer['country'])
+        #     cau_ctry_key = cau_ctry['ISO2'].values[0]
+
+
+        #     if inj_ctry_key != cau_ctry_key:
+        #         if inj_ctry_key in dict_by_country:
+                    
+        #             if date in dict_by_country[inj_ctry_key]['HJ_by_date']['injured']:
+        #                 dict_by_country[inj_ctry_key]['HJ_by_date']['injured'][date].append([1,cau_ctry_key])
+        #             else :
+        #                 dict_by_country[inj_ctry_key]['HJ_by_date']['injured'][date] = [[1,cau_ctry_key]]
+
+        #             dict_by_country[inj_ctry_key]['HJ_count']['injured_count'] += 1
+
+        #             issue_inf = {
+        #                     'text':item['raw']['text'],
+        #                     'issue_date': date
+        #                 }
+        #             dict_by_country[inj_ctry_key]['issue'].append(issue_inf)
+
+        #         else:
+        #             date_inf = {'count': 1,
+        #                         'ctry':cau_ctry_key,
+        #                         'ASN': self.country_info.get_asn_from_string(injured['issue'])
+        #                         }
+        #             dict_by_country[inj_ctry_key] = {
+        #                 'ctry_fullname': inj_ctry['LIST NAME'].values[0],
+        #                 'OT_by_date': {},
+        #                 'OT_count': 0 ,
+        #                 'HJ_by_date': {'injured': {date: [date_inf]},
+        #                                'causer': {}},
+        #                 'HJ_count': {'injured_count': 1, 'causer_count':0} ,
+        #                 'HJ_autosabotage': {},
+        #                 'issue_ot':[],
+        #                 'issue_hj':[{
+        #                     'text':item['raw']['text'],
+        #                     'issue_date': date
+        #                 }]
+        #             }
+
+        #         if cau_ctry_key in dict_by_country:
+
+        #             if date in dict_by_country[cau_ctry_key]['HJ_by_date']['causer']:
+        #                 dict_by_country[cau_ctry_key]['HJ_by_date']['causer'][date].append([1,inj_ctry_key])
+        #             else :
+        #                 dict_by_country[cau_ctry_key]['HJ_by_date']['causer'][date] = [[1,inj_ctry_key]]
+
+        #             dict_by_country[cau_ctry_key]['HJ_count']['causer_count'] += 1
+        #             issue_inf = {
+        #                     'text':item['raw']['text'],
+        #                     'issue_date':item['raw']['date']
+        #                 }
+
+        #             dict_by_country[cau_ctry_key]['issue'].append(issue_inf)
+
+        #         else:
+        #             dict_by_country[cau_ctry_key] = {
+        #                 'ctry_fullname': cau_ctry['LIST NAME'].values[0],
+        #                 'OT_by_date': {},
+        #                 'OT_count': 0 ,
+        #                 'HJ_by_date': {'injured':{}, 'causer': {date: [[1,inj_ctry_key]]}},
+        #                 'HJ_count': {'injured_count': 0, 'causer_count':1} ,
+        #                 'HJ_autosabotage': {},
+        #                 'issue_ot':[],
+        #                 'issue_hj':[{
+        #                     'text':item['raw']['text'],
+        #                     'issue_date': date
+        #                 }]
+        #             }
+        #     else:
+        #         if cau_ctry_key in dict_by_country:
+        #             if date in dict_by_country[inj_ctry_key]['HJ_autosabotage']:
+        #                 dict_by_country[inj_ctry_key]['HJ_autosabotage'][date] += 1
+        #             else:
+        #                 dict_by_country[inj_ctry_key]['HJ_autosabotage'][date] = 1
+        #         else:
+        #             dict_by_country[cau_ctry_key] = {
+        #                 'ctry_fullname': cau_ctry['LIST NAME'].values[0],
+        #                 'OT_by_date': {},
+        #                 'OT_count': 0 ,
+        #                 'HJ_by_date': {'injured':{}, 'causer': {}},
+        #                 'HJ_count': {'injured_count': 0, 'causer_count':0} ,
+        #                 'HJ_autosabotage': {date: 1},
+        #                 'issue':[{
+        #                     'text':item['raw']['text'],
+        #                     'issue_date':item['raw']['date']
+        #                 }]
+        #             }
+                
+        # # Escritura en el diccionario de las fechas reciente y antigua
+        # dict_by_country['oldest_date'] = self.from_available_date
+        # dict_by_country['most_recent_date'] = self.to_available_date
+
+        # # Escritura del diccionario en un archivo de backup
+        # self.writer.write_dict_to_file("dict_by_country_v2.json", dict_by_country)
+
         return dict_by_country
     
 # Main().fix_dictionary_date()
 # Main().store_inital_data()
 # Main().update_data()
-Main().country_BGP_issues()
+Main().save_BGP_issues_by_country()
