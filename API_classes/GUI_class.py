@@ -1,13 +1,16 @@
-
+from ast import Lambda
 import tkinter
 from turtle import color, width
-from HJ_BGP_class import HJ_BGP
-from OT_BGP_class import OT_BGP
+from API_classes.PR_BGP_class import PR_BGP
+from API_classes.HJ_BGP_class import HJ_BGP
+from API_classes.OT_BGP_class import OT_BGP
+import API_classes.utils as utils
 from matplotlib import style
 import numpy as np
 import matplotlib.pyplot as plt
 import json
 from tkinter import *
+from tkinter import scrolledtext as st
 import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import Combobox
@@ -30,30 +33,32 @@ class Graphics(tk.Tk):
         # Asignamos un estilo para las pestañas de la aplicaicon
         s = ttk.Style()        
         s.configure('TNotebook.Tab', padding=[100, 10], font = ('Times', '21', 'bold'))
-        # Obtenemos los datos filtrados almacenados de manera local
-        self.country_data, self.country_iso2, self.raw_data, self.ot_data, self.o_date, self.r_date = self.readJson()
-
+        # # Obtenemos los datos filtrados almacenados de manera local
+        # self.country_data, self.country_iso2, self.raw_data, self.ot_data, self.o_date, self.r_date = self.readJson()
+        
+        country_data, country_iso2, raw_data, ot_data, o_date, r_date = utils.readJson('dict_by_country_v3.json')
         # Inicializacion de los objetos principales que se mostraran en la aplicacion
-        self.OT_bgp = OT_BGP()
-        self.HJ_bgp = HJ_BGP()
+        self.OT_bgp = OT_BGP(country_data, country_iso2, raw_data, ot_data, o_date, r_date)
+        self.HJ_bgp = HJ_BGP(country_data, country_iso2, raw_data, ot_data, o_date, r_date)
+        self.PR_bgp = PR_BGP(country_data, country_iso2, raw_data, ot_data, o_date, r_date)
         
         # inicializacion del panel principal de la aplicacion
         self.mainframe = Frame(self)
         self.mainframe.pack()
 
-        # Variable no utilizada #TODO
+        #TODO Variable no utilizada 
         self.country_entry = None
 
         # Construccion de las difrentes pestañas que compondran la aplicacion
         tab_widget = ttk.Notebook(self.mainframe)
         self.Ot_tab = Frame(tab_widget)
         self.HJ_tab = Frame(tab_widget)
-        self.BGP_nt_r = Frame(tab_widget)
+        self.recom_tab = Frame(tab_widget)
         
         # Adicion de las diferentes pestañas al panel principal de la aplicacion
         tab_widget.add(self.Ot_tab, text ='Outage Stats')
         tab_widget.add(self.HJ_tab, text ='Hijack Stats')
-        tab_widget.add(self.BGP_nt_r, text ='BGP Net Policy Recommend')
+        tab_widget.add(self.recom_tab, text ='BGP Net Policy Recommend')
         tab_widget.pack(expand = 1, fill ="both")
 
         # Llamada a la construccion interna de los componentes de cada pestaña
@@ -67,7 +72,7 @@ class Graphics(tk.Tk):
     # Funcion para leer el archivo Json que contiene la informacion con las incidencias BGP
     def readJson(self):
         # Apertura y lectura del archivo Json correspondiente y almacenado localmente
-        with open('dict_by_country.json')as json_file:
+        with open('dict_by_country_v2.json')as json_file:
             raw_data  = json.load(json_file)
         
         # Inicializacion de listas que seleccionaran la informacion que sera tratada en la aplicacion
@@ -105,7 +110,7 @@ class Graphics(tk.Tk):
             autocomp_country_frame, 
             width=40, 
             font=('Times', 18),
-            completevalues=self.country_data
+            completevalues=bgp_object.mainlist
             )
         # Emplazamiento del widget de autocompletado para seleccionar los paises a añadir
         auto_in.grid(row=1, column=0, sticky= tk.NS)
@@ -125,7 +130,7 @@ class Graphics(tk.Tk):
                 country_list_frame, 
                 width=40, 
                 font=('Times', 18),
-                completevalues=bgp_object.get_country_list()
+                completevalues=bgp_object.get_selected_list()
                 )
         # Emplazamiento del widget de autocompletado para seleccionar los paises a eliminar
         auto_out.grid(row=1, column=0, sticky= tk.NS)
@@ -138,7 +143,7 @@ class Graphics(tk.Tk):
             width=18,
             font=('Times', 18),
             text = "Add to list",
-            command= lambda: [bgp_object.add_to_country_list(auto_in.get()),self.update_ot_list_info(bgp_object,auto_out)],
+            command= lambda: [bgp_object.add_to_selected_list(auto_in.get()),self.update_ot_list_info(bgp_object,auto_out)],
             bg='steel blue',
             ).grid(row=0, column=0)
         # Creacion y emplazamiento del boton para añadir todos los elementos a la lista de seleccionados
@@ -147,7 +152,7 @@ class Graphics(tk.Tk):
             width=18,
             font=('Times', 18),
             text = "Add All",
-            command= lambda: [bgp_object.set_country_list(self.country_data),self.update_ot_list_info(bgp_object,auto_out)],
+            command= lambda: [bgp_object.set_selected_list(bgp_object.mainlist),self.update_ot_list_info(bgp_object,auto_out)],
             bg='steel blue',
             ).grid(row=0, column=1)
         # Emplazamiento de la botonera de adicion
@@ -161,7 +166,7 @@ class Graphics(tk.Tk):
             width=18,
             font=('Times', 18),
             text = "Delete from list",
-            command= lambda: [bgp_object.remove_from_country_list(auto_out.get()),self.update_ot_list_info(bgp_object, auto_out)],
+            command= lambda: [bgp_object.remove_from_selected_list(auto_out.get()),self.update_ot_list_info(bgp_object, auto_out)],
             bg='steel blue',
             ).grid(row=0, column=0)
         # Creacion y emplazamiento del boton para eliminar todos los elementos de la lista de seleccionados
@@ -170,7 +175,7 @@ class Graphics(tk.Tk):
             width=18,
             font=('Times', 18),
             text = "Clear List",
-            command= lambda: [bgp_object.clear_country_list(),self.update_ot_list_info(bgp_object, auto_out)],
+            command= lambda: [bgp_object.clear_selected_list(),self.update_ot_list_info(bgp_object, auto_out)],
             bg='steel blue',
             ).grid(row=0, column=1)
         # Emplazamiento de la botonera de eliminacion
@@ -178,7 +183,7 @@ class Graphics(tk.Tk):
 
     # Funcion para actualizar la lista de valores seleccionados cuando se pulse el boton correspondiente
     def update_ot_list_info(self, bgp_object, auto_out):
-        auto_out.configure(completevalues = bgp_object.get_country_list())
+        auto_out.configure(completevalues = bgp_object.get_selected_list())
     
     # Funcion que permite construir el widget para mostrar la infromacion en forma de graficos
     def plot_widget(self, tab_frame, plot_main_func ,from_cl, to_cl):
@@ -234,7 +239,7 @@ class Graphics(tk.Tk):
         
         return figAgg
     
-    def date_selectors_widget(self, tabname):
+    def date_selectors_widget(self, tabname, bgp_object):
         # def from_date_selector_widget(self):
         date_frame  = Frame(tabname)
         
@@ -242,18 +247,18 @@ class Graphics(tk.Tk):
         l1 = Label(
                 date_frame,
                 bg='steel blue',
-                font = ('Times',21),
+                font=('Times',21),
                 text='From date',
         )
         
         from_cal = DateEntry(master = date_frame ,
                     font="Times 18",
                     selectmode='day',
-                    year=self.o_date.year,
-                    month=self.o_date.month,
-                    day=self.o_date.day,
-                    mindate = self.o_date,
-                    maxdate = self.r_date
+                    year=bgp_object.o_date.year,
+                    month=bgp_object.o_date.month,
+                    day=bgp_object.o_date.day,
+                    mindate=bgp_object.o_date,
+                    maxdate=bgp_object.r_date
                     )
         
         # def to_date_selector_widget(self):        
@@ -267,11 +272,11 @@ class Graphics(tk.Tk):
         to_cal = DateEntry(master = date_frame,
                     font="Times 18",
                     selectmode='day',
-                    year=self.r_date.year,
-                    month=self.r_date.month,
-                    day=self.r_date.day,
-                    mindate = self.o_date,
-                    maxdate = self.r_date)
+                    year=bgp_object.r_date.year,
+                    month=bgp_object.r_date.month,
+                    day=bgp_object.r_date.day,
+                    mindate=bgp_object.o_date,
+                    maxdate=bgp_object.r_date)
 
         l1.grid(row=0, column=0, sticky= tk.N)
         l2.grid(row=0, column=2, sticky= tk.N)
@@ -311,7 +316,7 @@ class Graphics(tk.Tk):
 
         canvas.draw()
 
-    # Funcion no utilizada de momento #TODO
+    #TODO Funcion no utilizada de momento 
     def search_items(self):
         search_value = self.country_entry.get()
         if search_value == "" or search_value == " ":
@@ -326,28 +331,28 @@ class Graphics(tk.Tk):
     
     def Ot_bar_plot(self, canvas_figure, figure, from_cl, to_cl):
         ot_bar_diag = {'X': [], 'Y':[]}
-        for item in self.OT_bgp.get_country_list():
-            iso2Ctry =self.country_iso2[self.country_data.index(item)]
+        for item in self.OT_bgp.get_selected_list():
+            iso2Ctry =self.OT_bgp.country_iso2[self.OT_bgp.country_data.index(item)]
             ot_bar_diag['X'].append(iso2Ctry)
-            ot_count = self.obtain_conutry_ot_between_dates(iso2Ctry, from_cl.get_date(), to_cl.get_date())
+            ot_count = self.obtain_country_ot_between_dates(iso2Ctry, from_cl.get_date(), to_cl.get_date())
             ot_bar_diag['Y'].append(ot_count)
         
         self.show_plot(canvas_figure, figure, ot_bar_diag['X'], ot_bar_diag['Y'])
 
-    def obtain_conutry_ot_between_dates(self, countryISO2, from_date, to_date):
+    def obtain_country_ot_between_dates(self, countryISO2, from_date, to_date):
         ot_counter = 0
         from_date = datetime.datetime.combine(from_date, datetime.datetime.min.time()).replace(tzinfo=datetime.timezone.utc)
         to_date = datetime.datetime.combine(to_date, datetime.datetime.min.time()).replace(tzinfo=datetime.timezone.utc)
-        for k,v in self.raw_data[countryISO2]['OT_by_date'].items():
+        for k,v in self.OT_bgp.raw_data[countryISO2]['OT_by_date'].items():
             date_of_issue = self.string_to_datetime(k)
             if  from_date < date_of_issue < to_date:
-                ot_counter += v
+                ot_counter += 1
         return ot_counter
 
     def Hj_bar_plot(self,canvas_figure, figure, from_cl, to_cl):
         hj_bar_diag = {'X': [],'Y1':[], 'Y2':[]}
-        for item in self.HJ_bgp.get_country_list():
-            iso2Ctry =self.country_iso2[self.country_data.index(item)]
+        for item in self.HJ_bgp.get_selected_list():
+            iso2Ctry =self.HJ_bgp.country_iso2[self.HJ_bgp.country_data.index(item)]
             hj_bar_diag['X'].append(iso2Ctry)
             causer_counter ,injured_counter = self.obtain_conutry_hj_between_dates(iso2Ctry, from_cl.get_date(), to_cl.get_date())
             hj_bar_diag['Y1'].append(injured_counter)
@@ -361,27 +366,89 @@ class Graphics(tk.Tk):
         from_date = datetime.datetime.combine(from_date, datetime.datetime.min.time()).replace(tzinfo=datetime.timezone.utc)
         to_date = datetime.datetime.combine(to_date, datetime.datetime.min.time()).replace(tzinfo=datetime.timezone.utc)
 
-        for k,v in self.raw_data[countryISO2]['HJ_by_date']['causer'].items():
+        for k,v in self.HJ_bgp.raw_data[countryISO2]['HJ_by_date']['causer'].items():
             date_of_issue = self.string_to_datetime(k)
             if  from_date < date_of_issue < to_date:
-                causer_counter += v
+                causer_counter += 1
 
-        for k,v in self.raw_data[countryISO2]['HJ_by_date']['injured'].items():
+        for k,v in self.HJ_bgp.raw_data[countryISO2]['HJ_by_date']['injured'].items():
             date_of_issue = self.string_to_datetime(k)
             if  from_date < date_of_issue < to_date:
-                injured_counter += v
+                injured_counter += 1
 
         return causer_counter, injured_counter
 
+    def text_recomendator_widget(self,tab,bgp_object):
+
+        # Creacion de un frame auxiliar para facilitar el emplazamiento de elementos
+        aux_frame = Frame(tab)
+        aux_frame.grid(row=3, column=0, columnspan= 5,sticky= tk.NS)
+        scrolledtext= st.ScrolledText(aux_frame, width= 150, height=30)
+        scrolledtext.pack()
+            
+
+        # Creacion y emplazamiento del boton para obtener las evaluaciones
+        Button(
+            tab, 
+            width=30,
+            font=('Times', 18),
+            text = "Get recomendation",
+            command= lambda: self.get_selected_evaluations(scrolledtext,bgp_object),
+            bg='steel blue',
+            pady= 2
+        ).grid(row=0, column=2, columnspan= 1)
+    
+    def get_selected_evaluations(self, scrolledText, bgp_object):
+        selected = self.PR_bgp.get_selected_list()
+        results = {}
+
+        for item in selected:
+            if item == 'None':
+                print('el siguiente')
+            results_OT = bgp_object.get_OT_evaluation(item)
+            results_HJ = bgp_object.get_HJ_evaluation(item)
+            recomendation_HJ = bgp_object.get_recomendation_HJ(results_HJ)
+            recommendation_OT = bgp_object.get_recomendation_OT(results_OT)
+            results[item] = {'OT_eval':results_OT,'HJ_eval': results_HJ, 'OT_rec':recommendation_OT,'HJ_rec': recomendation_HJ}
+            self.print_results_in_text_widget(scrolledText, results)
+
+    def print_results_in_text_widget(self,textwidget, results):
+        for k,v in results.items():
+            textwidget.insert(tk.END, 'Autonomous System Number:' +str(k) + "\n")
+            
+            textwidget.insert(tk.END, "************** Data Recolected ****************\n")
+            textwidget.insert(tk.END, 'Outages in 30 days period:' +str(v['OT_eval']) + "\n")
+            textwidget.insert(tk.END, 'Hijacks in 30 days period:' +str(v['HJ_eval']) + "\n")
+            textwidget.insert(tk.END, "************** Recommendation *****************\n")
+            ot_rec_string = ''
+            if v['OT_rec'] > 0:
+                ot_rec_string = 'Recomendation due of outages: Reduce local preference in '
+                ot_rec_string += str(v['OT_rec'])
+            textwidget.insert(tk.END, ot_rec_string + "\n")
+            hj_rec_string = ''
+            if v['HJ_rec'] > 0:
+                hj_rec_string = 'Recomendation due of Hijacks: Reduce local preference in '
+                hj_rec_string += str(v['HJ_rec'] )
+            textwidget.insert(tk.END, hj_rec_string + "\n")
+            textwidget.insert(tk.END, "-------------------------\n")
+
+
+
     def construct_ot_tab(self):
-        from_cl, to_cl = self.date_selectors_widget(self.Ot_tab)
+        from_cl, to_cl = self.date_selectors_widget(self.Ot_tab, self.OT_bgp)
         self.autocomplete_country_combo_widget(self.Ot_tab, self.OT_bgp)
         self.plot_widget(self.Ot_tab, self.Ot_bar_plot, from_cl, to_cl)  
 
     def construct_hj_tab(self):
-        from_cl, to_cl = self.date_selectors_widget(self.HJ_tab)
+        from_cl, to_cl = self.date_selectors_widget(self.HJ_tab, self.HJ_bgp)
         self.autocomplete_country_combo_widget(self.HJ_tab, self.HJ_bgp)
         self.plot_widget(self.HJ_tab, self.Hj_bar_plot, from_cl, to_cl) 
+       
+    def construct_asn_policy_tab(self):
+        self.autocomplete_country_combo_widget(self.recom_tab,self.PR_bgp)
+        self.text_recomendator_widget(self.recom_tab,self.PR_bgp)
+        # self.plot_widget(self.recom_tab self.Ot_bar_plot, from_cl, to_cl) 
+
 
     # Funcion par costruir las diferentes pestañas de manera modular 
     def GUI_main_frame(self):
@@ -390,9 +457,10 @@ class Graphics(tk.Tk):
         # Asignamos un titulo al frontal de la aplicacion
         self.title("Sistema de recomendacion de politicas de trafico BGP")
 
-        # Contruimos la pestaña que mostrara la informacion con las caidas en BGP
+        # Contruimos la pestaña que mostrara la informacion con las caidas BGP
         self.construct_ot_tab()
-        # Construimos las pestaña que mostrara la informacion con las suplantaciones de BGP
+        # Construimos las pestaña que mostrara la informacion con los secuestros BGP
         self.construct_hj_tab()
-        
-Graphics().mainloop()
+        # Construimos las pestaña de recomendacion y tendencias segun los ASN en BGP
+        self.construct_asn_policy_tab()
+        self.mainloop()

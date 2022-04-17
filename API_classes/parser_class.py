@@ -58,8 +58,10 @@ class Parser():
                         }
                     }]
             elif issue == "OT":
-
-                outage_end = frame.index('',2,-1)
+                try:
+                    outage_end = frame.index('',2,-1)
+                except:
+                    outage_end = len(frame)-1
                 outage_info = frame[2:outage_end]
                 prefix_affected = frame[outage_end+1:-1]
 
