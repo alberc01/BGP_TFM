@@ -24,6 +24,7 @@ from uritemplate import expand
 from tkcalendar import Calendar, DateEntry
 import datetime
 import pytz
+import re
 
 class Graphics(tk.Tk):
     # Constructrora para inicializar la interfaz grafica de la aplicacion
@@ -36,7 +37,7 @@ class Graphics(tk.Tk):
         # # Obtenemos los datos filtrados almacenados de manera local
         # self.country_data, self.country_iso2, self.raw_data, self.ot_data, self.o_date, self.r_date = self.readJson()
         
-        country_data, country_iso2, raw_data, ot_data, o_date, r_date = utils.readJson('dict_by_country_v3.json')
+        country_data, country_iso2, raw_data, ot_data, o_date, r_date = utils.readJson('dict_by_country_maximixzed_v4.json')
         # Inicializacion de los objetos principales que se mostraran en la aplicacion
         self.OT_bgp = OT_BGP(country_data, country_iso2, raw_data, ot_data, o_date, r_date)
         self.HJ_bgp = HJ_BGP(country_data, country_iso2, raw_data, ot_data, o_date, r_date)
@@ -186,7 +187,7 @@ class Graphics(tk.Tk):
         auto_out.configure(completevalues = bgp_object.get_selected_list())
     
     # Funcion que permite construir el widget para mostrar la infromacion en forma de graficos
-    def plot_widget(self, tab_frame, plot_main_func ,from_cl, to_cl):
+    def plot_widget(self, tab_frame, plot_main_func ,from_cl, to_cl, button_label):
 
         # Creacion de un frame auxiliar para facilitar el emplazamiento de elementos
         aux_frame = Frame(tab_frame)
@@ -200,7 +201,7 @@ class Graphics(tk.Tk):
             tab_frame, 
             width=30,
             font=('Times', 18),
-            text = "Get outtage bar diagram",
+            text = button_label,
             command= lambda: plot_main_func(canvas_figure, figure, from_cl, to_cl),
             bg='steel blue',
             pady= 2
@@ -378,6 +379,31 @@ class Graphics(tk.Tk):
 
         return causer_counter, injured_counter
 
+
+    def __textchanged__(self, widget):
+        for tag in widget.tag_names():
+            widget.tag_remove(tag, '1.0', 'end')
+        lines = widget.get('1.0', 'end-1c').split('\n')
+        for i, line in enumerate(lines):
+            self.__applytag__(i, line, 'purple', 'neighbour|router bgp|remote_as|route-map|ip|set|match|permit', widget)
+            self.__applytag__(i, line, 'green', '!*(?<=(!))(?s)(.*$)', widget)
+            self.__applytag__(i, line, 'orange', '(?<=(:))(?s)(.*$)', widget)
+            self.__applytag__(i, line, 'red', '(\(- )*(?<=(- ))(?s)(.*$)', widget)
+            self.__applytag__(i, line, 'blue', '<*(?<=(<))(?s)(.*\>)', widget)
+            self.__applytag__(i, line, 'bold_blue', '.*(?=\s*\:[^/])', widget)
+            self.__applytag__(i, line, 'bold', '(\*)*(?<=(\*))(?s)(.*$)', widget)
+            self.__applytag__(i, line, 'separator', '----------------------------------------------------------------------------------------------------', widget)
+
+            #AS12479
+            
+
+    @staticmethod
+    def __applytag__ (line, text, tag, regex, widget):
+        indexes = [(m.start(), m.end()) for m in re.finditer(regex, text)]
+        for x in indexes:
+            widget.tag_add(tag, f'{line+1}.{x[0]}', f'{line+1}.{x[1]}')    
+
+
     def text_recomendator_widget(self,tab,bgp_object):
 
         # Creacion de un frame auxiliar para facilitar el emplazamiento de elementos
@@ -385,8 +411,16 @@ class Graphics(tk.Tk):
         aux_frame.grid(row=3, column=0, columnspan= 5,sticky= tk.NS)
         scrolledtext= st.ScrolledText(aux_frame, width= 150, height=30)
         scrolledtext.pack()
-            
+        scrolledtext.tag_configure('green', foreground = '#008000')
+        scrolledtext.tag_configure('purple', foreground = '#a820a1')
+        scrolledtext.tag_configure('orange', foreground = '#ff3403')
+        scrolledtext.tag_configure('red', foreground = '#d0001B')
+        scrolledtext.tag_configure('blue', foreground = '#006994')
+        scrolledtext.tag_configure('bold', font=("Helvetica", "12", "bold"))#AS12479
+        scrolledtext.tag_configure('bold_blue', foreground = '#0540a1',font=("Helvetica", "11", "bold"))#AS12479
+        scrolledtext.tag_configure('separator',background = '#000000',font=("Helvetica", "7", "bold"))
 
+        
         # Creacion y emplazamiento del boton para obtener las evaluaciones
         Button(
             tab, 
@@ -403,13 +437,18 @@ class Graphics(tk.Tk):
         results = {}
 
         for item in selected:
-            if item == 'None':
-                print('el siguiente')
             results_OT = bgp_object.get_OT_evaluation(item)
             results_HJ = bgp_object.get_HJ_evaluation(item)
-            recomendation_HJ = bgp_object.get_recomendation_HJ(results_HJ)
-            recommendation_OT = bgp_object.get_recomendation_OT(results_OT)
-            results[item] = {'OT_eval':results_OT,'HJ_eval': results_HJ, 'OT_rec':recommendation_OT,'HJ_rec': recomendation_HJ}
+            number_hj, recomendation_HJ = bgp_object.get_recomendation_HJ(results_HJ,item)
+            number_ot, recommendation_OT = bgp_object.get_recomendation_OT(results_OT,item)
+            results[item] = {
+                'OT_eval':results_OT,
+                'HJ_eval': results_HJ,
+                'OT_rec':number_ot,
+                'OT_commands': recommendation_OT,
+                'HJ_rec': number_hj,
+                'HJ_commands': recomendation_HJ
+            }
             self.print_results_in_text_widget(scrolledText, results)
 
     def print_results_in_text_widget(self,textwidget, results):
@@ -423,26 +462,29 @@ class Graphics(tk.Tk):
             ot_rec_string = ''
             if v['OT_rec'] > 0:
                 ot_rec_string = 'Recomendation due of outages: Reduce local preference in '
-                ot_rec_string += str(v['OT_rec'])
+                ot_rec_string += str(v['OT_rec']) + "\n"
+                ot_rec_string += v['OT_commands']
             textwidget.insert(tk.END, ot_rec_string + "\n")
+            
             hj_rec_string = ''
             if v['HJ_rec'] > 0:
                 hj_rec_string = 'Recomendation due of Hijacks: Reduce local preference in '
-                hj_rec_string += str(v['HJ_rec'] )
+                hj_rec_string += str(v['HJ_rec'] ) + "\n"
+                hj_rec_string += str(v['HJ_commands'] )
             textwidget.insert(tk.END, hj_rec_string + "\n")
-            textwidget.insert(tk.END, "-------------------------\n")
+            textwidget.insert(tk.END, "\n\n----------------------------------------------------------------------------------------------------\n\n")
 
-
-
+            self.__textchanged__(textwidget) #AS12479
+            
     def construct_ot_tab(self):
         from_cl, to_cl = self.date_selectors_widget(self.Ot_tab, self.OT_bgp)
         self.autocomplete_country_combo_widget(self.Ot_tab, self.OT_bgp)
-        self.plot_widget(self.Ot_tab, self.Ot_bar_plot, from_cl, to_cl)  
+        self.plot_widget(self.Ot_tab, self.Ot_bar_plot, from_cl, to_cl,"Get Outage bar diagram")  
 
     def construct_hj_tab(self):
         from_cl, to_cl = self.date_selectors_widget(self.HJ_tab, self.HJ_bgp)
         self.autocomplete_country_combo_widget(self.HJ_tab, self.HJ_bgp)
-        self.plot_widget(self.HJ_tab, self.Hj_bar_plot, from_cl, to_cl) 
+        self.plot_widget(self.HJ_tab, self.Hj_bar_plot, from_cl, to_cl,"Get Hijacks bar diagram") 
        
     def construct_asn_policy_tab(self):
         self.autocomplete_country_combo_widget(self.recom_tab,self.PR_bgp)
