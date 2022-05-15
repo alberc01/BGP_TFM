@@ -8,9 +8,7 @@ class PR_BGP(BGP):
         self.selected_list = []
         self.asn_data = self.get_ASN_info_to_recommend()
         self.mainlist = self.set_mainlist()
-        
-        
-
+    
     def set_mainlist(self):
         mainlist = []
         for i in self.asn_data.keys():
@@ -46,86 +44,88 @@ class PR_BGP(BGP):
         asn_dict = {}
         for primary_k in self.raw_data.keys():
             if primary_k != 'oldest_date' and primary_k != 'most_recent_date':
+
+                # Informacion ASN para los outages
                 for k,v in self.raw_data[primary_k]['OT_by_date'].items():
                     for item in v:
                         asn_key = item['ASN']
-                        if str(asn_key) == 'None':
-                            print(self.asn_data[asn_key])
                         asn_cntry = item['ctry']
+                        
+                        important_Data = item['scrapped_from_url']
+
                         if  asn_key not in asn_dict.keys():
                             asn_dict[asn_key] = {
                                 'dates_ot': [k],
                                 'dates_hj': [],
-                                'country': asn_cntry              
+                                'country': asn_cntry,
+                                'moredetail': important_Data            
                                 }
                         else:
                             asn_dict[asn_key]['dates_ot'].append(k)
+                            asn_dict[asn_key]['moredetail'] = important_Data
 
+                # Informacion ASN para los hijacks perjudicados
                 for k,v in self.raw_data[primary_k]['HJ_by_date']['injured'].items():
                     for item in v:
                         asn_inj_ctry = item['ctry_inj']
                         asn_cau_ctry = item['ctry_cau']
                         asn_cau_key = self.get_correct_asn(item['ASN_cau'])
                         asn_inju_key = self.get_correct_asn(item['ASN_inj'])
-                        # if str(asn_cau_key) == 'None' or str(asn_inju_key) == 'None':
-                        #     aux = self.raw_data[primary_k]
-                        #     for i in self.raw_data[primary_k]['issue_hj']['inju']:
-                        #         if asn_inju_key in i['text'] and asn_inj_ctry in i['text'] and asn_cau_ctry in i['text'] :
-                        #             iamsq = i['text']
-                        #             print(i['text'])
+
+                        important_Data = item['scrapped_from_url']
                 
                         if asn_inju_key not in asn_dict.keys():
                             asn_dict[asn_inju_key] = {
                                 'dates_ot': [],
                                 'dates_hj': [k],
-                                'country': asn_inj_ctry              
+                                'country': asn_inj_ctry,
+                                'moredetail': important_Data               
                                 }
                         else:
                             asn_dict[asn_inju_key]['dates_hj'].append(k)
-
-                        
+                            asn_dict[asn_inju_key]['moredetail'] = important_Data
 
                         if asn_cau_key not in asn_dict.keys():
                             asn_dict[asn_cau_key] = {
                                 'dates_ot': [],
                                 'dates_hj': [k],
-                                'country': asn_cau_ctry              
+                                'country': asn_cau_ctry,
+                                'moredetail': important_Data              
                                 }
                         else:
                             asn_dict[asn_cau_key]['dates_hj'].append(k)
+                            asn_dict[asn_cau_key]['moredetail'] = important_Data
 
+                # Informacion ASN para los hijacks causantes
                 for k,v in self.raw_data[primary_k]['HJ_by_date']['causer'].items():
                     for item in v:
                         asn_cau_key = self.get_correct_asn(item['ASN_cau'])
                         asn_inju_key = self.get_correct_asn(item['ASN_inj'])
                         asn_cau_ctry = item['ctry_cau']
                         asn_inj_ctry = item['ctry_inj']
-                        # if str(asn_cau_key) == 'None' or str(asn_inju_key) == 'None':
-                        #     aux = self.raw_data[primary_k]
-                        #     for i in self.raw_data[primary_k]['issue_hj']['causer']:
-                        #         if asn_inju_key in i['text'] and asn_inj_ctry in i['text'] and asn_cau_ctry in i['text'] :
-                        #             iamsq = i['text']
-                        #             print(i['text'])
+                        important_Data = item['scrapped_from_url']
 
                         if asn_inju_key not in asn_dict.keys():
                             asn_dict[asn_inju_key] = {
                                 'dates_ot': [],
                                 'dates_hj': [k],
-                                'country': asn_inj_ctry              
+                                'country': asn_inj_ctry,
+                                'moredetail': important_Data               
                                 }
                         else:
                             asn_dict[asn_inju_key]['dates_hj'].append(k)
-
-                        
+                            asn_dict[asn_inju_key]['moredetail'] = important_Data
 
                         if asn_cau_key not in asn_dict.keys():
                             asn_dict[asn_cau_key] = {
                                 'dates_ot': [],
                                 'dates_hj': [k],
-                                'country': asn_cau_ctry              
+                                'country': asn_cau_ctry,
+                                'moredetail': important_Data               
                                 }
                         else:
                             asn_dict[asn_cau_key]['dates_hj'].append(k)
+                            asn_dict[asn_cau_key]['moredetail'] = important_Data
                 
                 # TODO Mirar que hacer con los secuestros con origen y destino identicos
                 # for k,v in self.raw_data['HJ_autosabotage'].items():
@@ -133,7 +133,7 @@ class PR_BGP(BGP):
         return asn_dict
 
     #TODO Hacer tendencias
-    def get_recomendation_HJ(self, hj_results):
+    def get_recomendation_HJ(self, hj_results, asn_cau):
         max_incidents = 3
         incident_count = 0
         local_pref_factor = 10
@@ -141,11 +141,12 @@ class PR_BGP(BGP):
             if item >= max_incidents:
                 incident_count+=1
         
-        return incident_count*local_pref_factor
+        pref_to_reduce = incident_count*local_pref_factor
+        commands = self.construct_vtysh_commands_hj(asn_cau, pref_to_reduce)
+        return pref_to_reduce,commands
                 
 
-
-    def get_recomendation_OT(self, ot_results):
+    def get_recomendation_OT(self, ot_results, asn_cau):
         max_incidents = 3
         incident_count = 0
         local_pref_factor = 5
@@ -153,7 +154,9 @@ class PR_BGP(BGP):
             if item >= max_incidents:
                 incident_count+=1
         
-        return incident_count*local_pref_factor
+        pref_to_reduce = incident_count*local_pref_factor
+        commands = self.construct_vtysh_commands_ot(asn_cau, pref_to_reduce)
+        return pref_to_reduce,commands
 
     #TODO Funcion para evaluar los secuestros
     def get_HJ_evaluation(self, asn_selected):
@@ -189,3 +192,39 @@ class PR_BGP(BGP):
             return evaluation
         else:
             return data
+
+
+    def construct_vtysh_commands_ot(self, asn, pref):
+        # El filtrado solo debe contemplar aquellos anuncion en los que el asn esta en medio del AS_PATH
+        asn_filter = '_'+ asn.replace('AS','')  + '_'
+        string = "\
+! Router section   \n\
+router bgp <YOUR ASN NUMBER> \n\
+    ! <a.b.c.d> is the IP direction of the router BGP neighbour\n\
+    neighbour <a.b.c.d> remote_as " + asn.replace('AS','') + "\n\
+    neighbour <a.b.c.d> route-map BgpRS_RM " + asn.replace('AS','')  + " in \n\
+    ! Access-list declaration section \n\
+        ip access-list BgpRS_RECOM permit "+ asn_filter+ " !Filter to find all routes in AS_PATH where the AS problem causer is between \n\
+    ! Route-map declaration section \n\
+        route-map BgpRS_RM permit 10 \n\
+            match as-path BgpRS_RECOM\n\
+            set local-prefence (- " + str(pref)+ ")" 
+        return string
+    
+
+    def construct_vtysh_commands_hj(self, asn, pref):
+        # El filtrado solo debe contemplar aquellos anuncios en los que el ASN es origen o final
+        asn_filter = '_' + asn.replace('AS','') + '$' # Rutas con origen en el ASN agresor
+        string = "\
+! Router section   \n\
+router bgp <YOUR ASN NUMBER> \n\
+    ! <a.b.c.d> is the IP direction of the router BGP neighbour\n\
+    neighbour <a.b.c.d> remote_as " + asn.replace('AS','') + "\n\
+    neighbour <a.b.c.d> route-map BgpRS_RM " + asn.replace('AS','') + " in \n\
+    ! Access-list declaration section \n\
+        ip access-list BgpRS_RECOM permit "+ asn_filter + " ! Filter to find all routes in AS_PATH where the AS problem is origin \n\
+    ! Route-map declaration section \n\
+        route-map BgpRS_RM permit 10 \n\
+        match as-path BgpRS_RECOM\n\
+        set local-prefence (- " + str(pref)+ ")" 
+        return string
