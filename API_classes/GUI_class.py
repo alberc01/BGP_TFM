@@ -37,7 +37,7 @@ class Graphics(tk.Tk):
         # # Obtenemos los datos filtrados almacenados de manera local
         # self.country_data, self.country_iso2, self.raw_data, self.ot_data, self.o_date, self.r_date = self.readJson()
         
-        country_data, country_iso2, raw_data, ot_data, o_date, r_date = utils.readJson('dict_by_country_maximixzed_v4.json')
+        country_data, country_iso2, raw_data, ot_data, o_date, r_date = utils.readJson('final_dict_by_country_maximi_v3.json')
         # Inicializacion de los objetos principales que se mostraran en la aplicacion
         self.OT_bgp = OT_BGP(country_data, country_iso2, raw_data, ot_data, o_date, r_date)
         self.HJ_bgp = HJ_BGP(country_data, country_iso2, raw_data, ot_data, o_date, r_date)
@@ -385,7 +385,7 @@ class Graphics(tk.Tk):
             widget.tag_remove(tag, '1.0', 'end')
         lines = widget.get('1.0', 'end-1c').split('\n')
         for i, line in enumerate(lines):
-            self.__applytag__(i, line, 'purple', 'neighbour|router bgp|remote_as|route-map|ip|set|match|permit', widget)
+            self.__applytag__(i, line, 'purple', 'neighbor|router bgp|remote_as|route-map|ip|set|match|permit', widget)
             self.__applytag__(i, line, 'green', '!*(?<=(!))(?s)(.*$)', widget)
             self.__applytag__(i, line, 'orange', '(?<=(:))(?s)(.*$)', widget)
             self.__applytag__(i, line, 'red', '(\(- )*(?<=(- ))(?s)(.*$)', widget)
@@ -394,7 +394,7 @@ class Graphics(tk.Tk):
             self.__applytag__(i, line, 'bold', '(\*)*(?<=(\*))(?s)(.*$)', widget)
             self.__applytag__(i, line, 'separator', '----------------------------------------------------------------------------------------------------', widget)
 
-            #AS12479
+            #AS12479 AS51984
             
 
     @staticmethod
@@ -426,7 +426,7 @@ class Graphics(tk.Tk):
             tab, 
             width=30,
             font=('Times', 18),
-            text = "Get recomendation",
+            text = "Get recommendation",
             command= lambda: self.get_selected_evaluations(scrolledtext,bgp_object),
             bg='steel blue',
             pady= 2
@@ -437,19 +437,20 @@ class Graphics(tk.Tk):
         results = {}
 
         for item in selected:
-            results_OT = bgp_object.get_OT_evaluation(item)
-            results_HJ = bgp_object.get_HJ_evaluation(item)
-            number_hj, recomendation_HJ = bgp_object.get_recomendation_HJ(results_HJ,item)
-            number_ot, recommendation_OT = bgp_object.get_recomendation_OT(results_OT,item)
-            results[item] = {
-                'OT_eval':results_OT,
-                'HJ_eval': results_HJ,
-                'OT_rec':number_ot,
-                'OT_commands': recommendation_OT,
-                'HJ_rec': number_hj,
-                'HJ_commands': recomendation_HJ
-            }
-            self.print_results_in_text_widget(scrolledText, results)
+            if item != 'None':
+                results_OT = bgp_object.get_OT_evaluation(item)
+                results_HJ = bgp_object.get_HJ_evaluation(item)
+                number_hj, recomendation_HJ = bgp_object.get_recomendation_HJ(results_HJ,item)
+                number_ot, recommendation_OT = bgp_object.get_recomendation_OT(results_OT,item)
+                results[item] = {
+                    'OT_eval':results_OT,
+                    'HJ_eval': results_HJ,
+                    'OT_rec':number_ot,
+                    'OT_commands': recommendation_OT,
+                    'HJ_rec': number_hj,
+                    'HJ_commands': recomendation_HJ
+                }
+        self.print_results_in_text_widget(scrolledText, results)
 
     def print_results_in_text_widget(self,textwidget, results):
         for k,v in results.items():
@@ -461,14 +462,14 @@ class Graphics(tk.Tk):
             textwidget.insert(tk.END, "************** Recommendation *****************\n")
             ot_rec_string = ''
             if v['OT_rec'] > 0:
-                ot_rec_string = 'Recomendation due of outages: Reduce local preference in '
+                ot_rec_string = 'Recommendation due of Outages: Reduce local preference in '
                 ot_rec_string += str(v['OT_rec']) + "\n"
                 ot_rec_string += v['OT_commands']
             textwidget.insert(tk.END, ot_rec_string + "\n")
             
             hj_rec_string = ''
             if v['HJ_rec'] > 0:
-                hj_rec_string = 'Recomendation due of Hijacks: Reduce local preference in '
+                hj_rec_string = 'Recommendation due of Hijacks: Reduce local preference in '
                 hj_rec_string += str(v['HJ_rec'] ) + "\n"
                 hj_rec_string += str(v['HJ_commands'] )
             textwidget.insert(tk.END, hj_rec_string + "\n")
