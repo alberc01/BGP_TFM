@@ -3,6 +3,9 @@ import datetime
 import re
 from bs4 import BeautifulSoup
 import requests
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def write_dict_to_file(FILE_name, dict):
@@ -38,9 +41,9 @@ def readJson(filename):
 
 
 def webscapp(url):
-    req = requests.get(url.replace('\u2026',''))
+    req = requests.get(url.replace('\u2026',''), verify=False)
     netx_url = req.url
-    response = requests.get(netx_url)
+    response = requests.get(netx_url, verify=False)
     response = BeautifulSoup(response.content, "html.parser")
     html_body = response.body
     ret = []
@@ -91,5 +94,5 @@ def get_ot_characteristics(url):
 
         return important_info, start_time, end_time
     except:
-        return []
+        return ['URL NOT REACHABLE','URL NOT REACHABLE','URL NOT REACHABLE']
 
