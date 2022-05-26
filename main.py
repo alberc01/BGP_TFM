@@ -9,6 +9,7 @@ import os
 import json
 import datetime
 import pycountry
+
 class Main():
     # Constructora e la clase, inicializa apis y archivos para la obtencion de informacion
     def __init__(self):
@@ -381,27 +382,34 @@ class Main():
         return dict_by_country
     
     
-    #TODO FUNCION PARA GENERAR DAATOS SITNTETICOS
+    #TODO FUNCION PARA GENERAR DATOS SITNTETICOS
     def generate_synthetic_BGP_issues(self, number, filename):
         
         return True
 
-    #TODO UNCION PARA AÑADIR EVENTOS DE UN ARCHIVO AL CONJUNTO DE DATOS LEIDOS POR LA APLICACION
-    def load_bgp_issues_from_file(self, source_file, dest_file):
+    # Funcion para añadir eventos de un archivo al conjunto de datos leidos por la aplicacion
+    def load_bgp_issues_from_file(self, source_file, dest_file, start=None, end= None):
+        if not start:
+            start = 0
+        
         src_content = open(source_file)
         src_data = json.load(src_content)
-        dest_content = open("dict_by_country_maximixzed_v3.json")
+        dest_content = open("final_dict_by_country_maximi_v2.json")
         dest_data = json.load(dest_content)
+        if not end:
+            end = len(src_data)
 
         item_count = 0
-        for item in src_data[14001:18000]:
+        for item in src_data[start:end]:
             item_count+=1
             if item['event_type'] == 'Outage':
                 dest_data = self.classify_OT_into_app(item, dest_data)
             elif item['event_type'] == 'Possible Hijack':
                 dest_data = self.classify_HJ_into_app(item, dest_data)
-            elif item['event_type'] == 'BGP Leak':
-                dest_data = self.classify_LK_into_app(item, dest_data)
+
+            # elif item['event_type'] == 'BGP Leak':
+            #     dest_data = self.classify_LK_into_app(item, dest_data)
+
             if item_count % 100 ==0:
                 print("Se han añadido "+ str(item_count) + " elementos por el momento. Por favor, siga esperando.")
 
@@ -450,7 +458,7 @@ class Main():
                 'ctry': country,
                 'ASN': 'AS'+str(elem['outage asn']),
                 'url': elem['moredetail'],
-                'scrapped_from_url':[ut.webscapp(elem['moredetail'])],
+                'scrapped_from_url':[ut.get_ot_characteristics(elem['moredetail'])],
                 'text': "Static data charged on main dict" + new_text
 
             }
@@ -891,13 +899,8 @@ class Main():
         self.gui = Graphics()
 
 
-
-
-
-    
-
 # Main().fix_dictionary_date()
 # Main().store_inital_data()
-# Main().update_data("dict_by_country_v3.json")
-# Main().load_bgp_issues_from_file("BGP_TFM/dataset/record.json","dict_by_country_maximixzed_v4.json")
+# Main().update_data("final_dict_by_country.json")
+# Main().load_bgp_issues_from_file("BGP_TFM/dataset/record.json","final_dict_by_country_maximi_v3.json",start=16001,end= 19900)
 Main().init_GUI()
