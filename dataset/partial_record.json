@@ -1,0 +1,47 @@
+[
+    {
+        "starttime_day": 11, 
+        "affected_prefixes": 59, 
+        "endtime_time": null, 
+        "event_type": "Outage", 
+        "starttime_year": 2018, 
+        "outage asn": 28186, 
+        "moredetail": "https://bgpstream.com/event/145718", 
+        "endtime_year": null, 
+        "endtime_month": null, 
+        "starttime_month": 8, 
+        "country": "ES", 
+        "endtime_day": null, 
+        "starttime_time": "08:31:00"
+    }, 
+    {
+        "starttime_day": 11, 
+        "affected_prefixes": 17, 
+        "endtime_time": null, 
+        "event_type": "Outage", 
+        "starttime_year": 2018, 
+        "outage asn": 263360, 
+        "moredetail": "https://bgpstream.com/event/145717", 
+        "endtime_year": null, 
+        "endtime_month": null, 
+        "starttime_month": 8, 
+        "country": "ES", 
+        "endtime_day": null, 
+        "starttime_time": "08:20:00"
+    }, 
+    {
+        "starttime_day": 11, 
+        "affected_prefixes": 36, 
+        "endtime_time": null, 
+        "event_type": "Outage", 
+        "starttime_year": 2018, 
+        "outage asn": 52995, 
+        "moredetail": "https://bgpstream.com/event/145715", 
+        "endtime_year": null, 
+        "endtime_month": null, 
+        "starttime_month": 8, 
+        "country": "ES", 
+        "endtime_day": null, 
+        "starttime_time": "07:42:00"
+    }
+]
