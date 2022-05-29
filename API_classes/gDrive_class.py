@@ -1,5 +1,6 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+from urllib3 import Retry
 
 class GoogleDriveApi():
     def __init__(self):
@@ -21,13 +22,16 @@ class GoogleDriveApi():
         return self.__drive.ListFile({'q': "'{}' in parents and trashed=false".format(folder_id)}).GetList()
 
     def download_file(self, folder_id):
-        file_list = self.get_files_at_directory(folder_id)
-        for file in file_list:
-            file_id = file['id']
-        file = self.__drive.CreateFile({'id': file_id,'parents': [{'id': folder_id}]}) 
-        content = file.GetContentString()
+        try:
+            file_list = self.get_files_at_directory(folder_id)
+            for file in file_list:
+                file_id = file['id']
+            file = self.__drive.CreateFile({'id': file_id,'parents': [{'id': folder_id}]}) 
+            content = file.GetContentString()
 
-        return file,content
+            return file,content
+        except:
+            return None, None
 
     def update_gdrive_file(self, gfile, content):
         gfile.SetContentString(content)
