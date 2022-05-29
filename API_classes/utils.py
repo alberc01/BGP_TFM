@@ -1,25 +1,40 @@
+from email.contentmanager import raw_data_manager
 import json
 import datetime
 import re
 from bs4 import BeautifulSoup
+import pytz
 import requests
 import urllib3
+import pytz
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
+TWITTER_FOLDER = '1lLBCk9CxaCKLyOb8Wwagge05t6f-yNRc'
 
 def write_dict_to_file(FILE_name, dict):
         with open(FILE_name, "a") as outfile:
                     json.dump(dict, outfile,indent=4)
 
+def get_current_date():
+    time_t = datetime.datetime.now(datetime.timezone.utc)
+    time_t = time_t - datetime.timedelta(microseconds=time_t.microsecond)
+    return time_t
+
+def get_current_date_string():
+    time_t = datetime.datetime.now(datetime.timezone.utc)
+    time_t = time_t - datetime.timedelta(microseconds=time_t.microsecond)
+    return str(time_t)
+
 def string_to_datetime(string_date):
     return datetime.datetime.strptime(string_date, '%Y-%m-%d %H:%M:%S%z')
     
 # Funcion para leer el archivo Json que contiene la informacion con las incidencias BGP
-def readJson(filename):
+def parseJson(json_cntent):
     # Apertura y lectura del archivo Json correspondiente y almacenado localmente
-    with open(filename)as json_file:
-        raw_data  = json.load(json_file)
+    # with open(filename)as json_file:
+    #     raw_data  = json.load(json_file)
+
+    raw_data = json_cntent
     
     # Inicializacion de listas que seleccionaran la informacion que sera tratada en la aplicacion
     country = []
@@ -27,8 +42,12 @@ def readJson(filename):
     country_iso2 = []
 
     # Obtencion de las fechas mas reciente y mas antigua para limitar el calendario de la aplicacion
-    recent_date= string_to_datetime(raw_data['most_recent_date'])
-    oldest_date= string_to_datetime(raw_data['oldest_date'])
+    try:
+        recent_date= string_to_datetime(raw_data['most_recent_date'])
+        oldest_date= string_to_datetime(raw_data['oldest_date'])
+    except:
+        recent_date= get_current_date()
+        oldest_date= get_current_date()
 
     # Poblado de datos con la informacion del Json, para que sea mas facil de tratar
     for k in raw_data.keys():
