@@ -1,5 +1,5 @@
 # BGP_TFM
-Introducción {#cap:introduccion}
+Introducción
 ============
 
 Internet es una herramienta que proporciona multitud de servicios a la
@@ -166,7 +166,7 @@ concreto, proporcionando instrucciones de configuración para evitar
 redirigir el tráfico por aquellos AS que hayan sido considerados como no
 fiables.
 
-Puesta en marcha de la aplicación {#cap:APLICACION}
+Puesta en marcha de la aplicación
 =================================
 
 A lo largo de esta memoria se han podido visualizar las características
@@ -273,7 +273,7 @@ variables mostradas en la figura
 [1.3](#fig:twitDevACC){reference-type="ref" reference="fig:twitDevACC"}.
 
 ![Archivo en BgpRS para introducir las credenciales de
-Twitter[]{label="fig:twitDevACC"}](Imagenes/Bitmap/Credenciales_Twitter.PNG){#fig:twitDevACC
+Twitter[]{label="fig:twitDevACC"}](IMG/CAP7/Credenciales_Twitter.PNG){#fig:twitDevACC
 width="80%"}
 
 Una vez realizados todos estos pasos, la aplicación será capaz de
