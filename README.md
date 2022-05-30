@@ -166,7 +166,7 @@ concreto, proporcionando instrucciones de configuración para evitar
 redirigir el tráfico por aquellos AS que hayan sido considerados como no
 fiables.
 
-Puesta en marcha de la aplicación
+Puesta en marcha de la aplicación {#cap:APLICACION}
 =================================
 
 A lo largo de esta memoria se han podido visualizar las características
@@ -249,7 +249,7 @@ Developer* se asemejará al representado en la figura
 [1.3](#fig:twitDevACC){reference-type="ref" reference="fig:twitDevACC"}.
 
 ![Permisos *Academic Research* en Twitter, *fuente:
-<https://developer.twitter.com/en/portal/products>*[]{label="fig:twitDevACC"}](IMG/CAP7/academic_research_plan.PNG){#fig:twitDevACC
+<https://developer.twitter.com/en/portal/products>*[]{label="fig:twitDevACC"}](Imagenes/Bitmap/academic_research_plan.PNG){#fig:twitDevACC
 width="100%"}
 
 ### Asignación de credenciales dentro de BgpRS
@@ -262,7 +262,7 @@ y como se representa en la figura
 [1.3](#fig:twitDevACC){reference-type="ref" reference="fig:twitDevACC"}.
 
 ![Acceso a credenciales de Twitter, *fuente:
-<https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*[]{label="fig:twitDevACC"}](IMG/CAP7/Credenciales_Twitter_web.PNG){#fig:twitDevACC
+<https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*[]{label="fig:twitDevACC"}](Imagenes/Bitmap/Credenciales_Twitter_web.PNG){#fig:twitDevACC
 width="1.\textwidth"}
 
 Con estas credenciales en nuestra posesión, ya solo se necesita
@@ -273,7 +273,7 @@ variables mostradas en la figura
 [1.3](#fig:twitDevACC){reference-type="ref" reference="fig:twitDevACC"}.
 
 ![Archivo en BgpRS para introducir las credenciales de
-Twitter[]{label="fig:twitDevACC"}](IMG/CAP7/Credenciales_Twitter.PNG){#fig:twitDevACC
+Twitter[]{label="fig:twitDevACC"}](Imagenes/Bitmap/Credenciales_Twitter.PNG){#fig:twitDevACC
 width="80%"}
 
 Una vez realizados todos estos pasos, la aplicación será capaz de
@@ -295,7 +295,7 @@ de esta consola, se podrá crear un proyecto para posteriormente activar
 el servicio correspondiente de Google Drive.
 
 ![Credenciales de Google Drive, *fuente:
-<https://console.cloud.google.com/apis/credentials?authuser=1&project=phrasal-clover-312717>*[]{label="fig:credenGdriveP1"}](IMG/CAP7/Credenciales_gdrive.png){#fig:credenGdriveP1
+<https://console.cloud.google.com/apis/credentials?authuser=1&project=phrasal-clover-312717>*[]{label="fig:credenGdriveP1"}](Imagenes/Bitmap/Credenciales_gdrive.png){#fig:credenGdriveP1
 width="100%"}
 
 En la figura [1.4](#fig:credenGdriveP1){reference-type="ref"
@@ -346,7 +346,7 @@ porque ser idéntico, ya que de estas, como se vera mas adelante, solo se
 utilizará el identificador de las mismas.
 
 ![Distribución de carpetas en Google Drive, *fuente:
-<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*[]{label="fig:distribuGdrive"}](IMG/CAP7/Distribu_gdrive.PNG){#fig:distribuGdrive
+<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*[]{label="fig:distribuGdrive"}](Imagenes/Bitmap/Distribu_gdrive.PNG){#fig:distribuGdrive
 width="100%"}
 
 El contenido de estas carpetas tiene diferente significado para BgpRS.
@@ -372,7 +372,7 @@ identificadores se puede observar en la figura
 [1.6](#fig:folderids){reference-type="ref" reference="fig:folderids"}.
 
 ![Obtención de identificadores de carpeta, *fuente:
-<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>*[]{label="fig:folderids"}](IMG/CAP7/Folder_ids_gdrive.PNG){#fig:folderids
+<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>*[]{label="fig:folderids"}](Imagenes/Bitmap/Folder_ids_gdrive.PNG){#fig:folderids
 width="100%"}
 
 Una vez obtenidos cada uno de los identificadores, solo hace falta
@@ -385,7 +385,7 @@ sobre las variables que se resaltan en rojo en la figura
 reference="fig:IDSBGPRSGDRIVE"}.
 
 ![Asignación de identificadores de carpeta en
-BgpRS[]{label="fig:IDSBGPRSGDRIVE"}](IMG/CAP7/Carpetas_gDrive_bgpRS.PNG){#fig:IDSBGPRSGDRIVE
+BgpRS[]{label="fig:IDSBGPRSGDRIVE"}](Imagenes/Bitmap/Carpetas_gDrive_bgpRS.PNG){#fig:IDSBGPRSGDRIVE
 width="60%"}
 
 Con cada uno de estos pasos realizados, BgpRS estará capacitado para
@@ -415,7 +415,7 @@ reference="fig:accesorapid"}. La descripción de cada uno de estos
 botones se realizará en las secciones a continuación.
 
 ![Funcionalidades adicionales de
-BgpRS[]{label="fig:accesorapid"}](IMG/CAP7/iface_bgp_datos.png){#fig:accesorapid
+BgpRS[]{label="fig:accesorapid"}](Imagenes/Bitmap/iface_bgp_datos.png){#fig:accesorapid
 width="100%"}
 
 ### Actualización de datos vía Twitter
@@ -447,7 +447,7 @@ reflejado en la figura [1.9](#fig:ejecucionUPDATE){reference-type="ref"
 reference="fig:ejecucionUPDATE"}.
 
 ![Acción del proceso de actualizado de
-datos.[]{label="fig:ejecucionUPDATE"}](IMG/CAP7/Ejecuta_update.PNG){#fig:ejecucionUPDATE
+datos.[]{label="fig:ejecucionUPDATE"}](Imagenes/Bitmap/Ejecuta_update.PNG){#fig:ejecucionUPDATE
 width="80%"}
 
 Como se puede observar, en primer lugar se le preguntará al usuario si
@@ -458,7 +458,7 @@ notificará al usuario a través del mensaje reflejado en la figura
 reference="fig:dataupdated"}.
 
 ![Mensaje de notificación sobre el actualizado de
-datos[]{label="fig:dataupdated"}](IMG/CAP7/data_updated_msg.png){#fig:dataupdated
+datos[]{label="fig:dataupdated"}](Imagenes/Bitmap/data_updated_msg.png){#fig:dataupdated
 width="30%"}
 
 ### Datos sintéticos
@@ -481,7 +481,7 @@ figura [1.11](#fig:seleccionArch){reference-type="ref"
 reference="fig:seleccionArch"}.
 
 ![Selección de archivo estático para aumentar los datos
-disponibles[]{label="fig:seleccionArch"}](IMG/CAP7/sleccion_archiv_estatic.png){#fig:seleccionArch
+disponibles[]{label="fig:seleccionArch"}](Imagenes/Bitmap/sleccion_archiv_estatic.png){#fig:seleccionArch
 width="80%"}
 
 Después de seleccionar el archivo, se solicitará confirmación al usuario
@@ -498,7 +498,7 @@ por la aplicación, por lo que si se desea contemplar otros datos deberá
 eliminarse o modificarse en Google Drive.
 
 ![Confirmación de cargado de datos
-estáticos[]{label="fig:confirmastatic"}](IMG/CAP7/confirma_static.PNG){#fig:confirmastatic
+estáticos[]{label="fig:confirmastatic"}](Imagenes/Bitmap/confirma_static.PNG){#fig:confirmastatic
 width="30%"}
 
 ### Limitaciones para el usuario
@@ -522,8 +522,177 @@ encargará de advertirle mediante el mensaje ilustrado en la figura
 reference="fig:limitacionesUsu"}.
 
 ![Limitaciones al actualizar los datos
-[]{label="fig:limitacionesUsu"}](IMG/CAP7/Limitacion_usuario.png){#fig:limitacionesUsu
+[]{label="fig:limitacionesUsu"}](Imagenes/Bitmap/Limitacion_usuario.png){#fig:limitacionesUsu
 width="100%"}
+
+\@bookKonstantinos, author = Konstantinos Arakadakis, title = BGPstream
+events analysis, url =
+https://gitlab.com/konstantinosarakadakis/BGPstream/-/tree/master
+
+\@techreportbgp-facebook, day = 5, month = Octubre, year = 2021, url =
+https://www.elmundo.es/tecnologia/2021/10/05/615c1d92fc6c8324028b45df.html,
+urldate = 2022-05-09TZ, title = Los culpables de la caída de Facebook,
+WhatsApp e Instagram: el BGP y las DNS, author = Bruno Toledano
+
+\@techreportpaises-datos, type = Dataset, year = 2012, month = December,
+url = https://datahub.io/core/country-list, title = List of all
+countries with their 2 digit codes (ISO 3166-1)
+
+\@techreportpycountry, author = Theune C., type = Python library, title
+= ISO country, subdivision, language, currency and script definitions
+and their translations, url = https://pypi.org/project/pycountry/
+
+\@bookhurricane, author = Hurricane Electric, title = Hurricane
+Electric's Network Looking Glass, url = https://lg.he.net/
+
+\@bookreiris, author = RedIRIS NOC, title = RedIRIS Looking glass, url =
+https://www.rediris.es/red/lg/
+
+\@techreportselenium, type = Selenium Documentation, year = 2011-2018,
+url = https://selenium-python.readthedocs.io/, title = Selenium with
+Python, license = License: This document is licensed under a Creative
+Commons Attribution-ShareAlike 4.0 International License
+\<http://creativecommons.org/licenses/by-sa/4.0/\>, author = Muthukadan
+B.
+
+\@bookPython, author = Van Rossum, Guido and Drake, Fred L., title =
+Python 3 Reference Manual, year = 2009, isbn = 1441412697, publisher =
+CreateSpace, address = Scotts Valley, CA, url = https://www.python.org/
+
+\@techreportISO13586, type = Standard, key = ISO 3166-1:2020(en), year =
+2020, url = https://www.iso.org/obp/ui/\#iso:std:iso:3166:-1:ed-4:v1:en,
+title = Codes for the representation of names of countries and their
+subdivisions -- Part 1: Country code \@techreportpydrive, type = Python
+Library Documentation, key = PyDrive documentation, year = 2016, url =
+https://pythonhosted.org/PyDrive/, title = PyDrive documentation, author
+= JunYoung Gwak and Scott Blevins and Robin Nabel and Google Inc.
+
+\@techreporttweepy, type = Python Library Documentation, key = Tweepy
+Documentation, year = 2009-2022, url =
+https://docs.tweepy.org/en/stable/, title = Tweepy Documentation, author
+= Roesslein J.
+
+\@inproceedingsorsini2016bgpstream, title=BGPStream: a software
+framework for live and historical BGP data analysis, author=Orsini,
+Chiara and King, Alistair and Giordano, Danilo and Giotsas, Vasileios
+and Dainotti, Alberto, doi = 10.1145/2987443.2987482,
+booktitle=Proceedings of the 2016 Internet Measurement Conference,
+pages=429--444, year=2016
+
+\@inproceedingsyan2009bgpmon, title=BGPmon: A real-time, scalable,
+extensible monitoring system, author=Yan, He and Oliveira, Ricardo and
+Burnett, Kevin and Matthews, Dave and Zhang, Lixia and Massey, Dan,
+booktitle=2009 Cybersecurity Applications & Technology Conference for
+Homeland Security, pages=212--223, doi = 10.1109/CATCH.2009.28,
+year=2009, organization=IEEE
+
+\@miscrfc1058, series = Request for Comments, number = 1058,
+howpublished = RFC 1058, publisher = RFC Editor, doi = 10.17487/RFC1058,
+url = https://www.rfc-editor.org/info/rfc1058, author = C.L. Hedrick,
+title = Routing Information Protocol, pagetotal = 33, year = 1988, month
+= jun, abstract = This RFC describes an existing protocol for exchanging
+routing information among gateways and other hosts. It is intended to be
+used as a basis for developing gateway software for use in the Internet
+community.,
+
+\@miscrfc1105, series = Request for Comments, number = 1105,
+howpublished = RFC 1105, publisher = RFC Editor, doi = 10.17487/RFC1105,
+url = https://www.rfc-editor.org/info/rfc1105, author = K. Lougheed and
+Y. Rekhter, title = Border Gateway Protocol (BGP), pagetotal = 17, year
+= 1989, month = jun, abstract = This RFC outlines a specific approach
+for the exchange of network reachability information between Autonomous
+Systems. Updated by RFCs 1163 and 1164. \[STANDARDS-TRACK\],
+
+\@miscrfc1163, series = Request for Comments, number = 1163,
+howpublished = RFC 1163, publisher = RFC Editor, doi = 10.17487/RFC1163,
+url = https://www.rfc-editor.org/info/rfc1163, author = Lougheed, K. and
+Y. Rekhter, title = Border Gateway Protocol (BGP), pagetotal = 29, year
+= 1990, month = jun, abstract = This RFC, together with its companion
+RFC-1164, \"Application of the Border Gateway Protocol in the
+Internet\", specify an inter-autonomous system routing protocol for the
+Internet. \[STANDARDS-TRACK\],
+
+\@miscrfc1265, series = Request for Comments, number = 1265,
+howpublished = RFC 1265, publisher = RFC Editor, doi = 10.17487/RFC1265,
+url = https://www.rfc-editor.org/info/rfc1265, author = Yakov Rekhter,
+title = BGP Protocol Analysis, pagetotal = 8, year = 1991, month = oct,
+abstract = This report summarizes the key feature of BGP, and analyzes
+the protocol with respect to scaling and performance. This memo provides
+information for the Internet community. It does not specify an Internet
+standard.,
+
+\@miscrfc1267, series = Request for Comments, number = 1267,
+howpublished = RFC 1267, publisher = RFC Editor, doi = 10.17487/RFC1267,
+url = https://www.rfc-editor.org/info/rfc1267, author = Lougheed, K. and
+Y. Rekhter, title = Border Gateway Protocol 3 (BGP-3), pagetotal = 35,
+year = 1991, month = oct, abstract = This memo, together with its
+companion document, \"Application of the Border Gateway Protocol in the
+Internet\", define an inter-autonomous system routing protocol for the
+Internet. \[STANDARDS-TRACK\],
+
+\@miscrfc1654, series = Request for Comments, number = 1654,
+howpublished = RFC 1654, publisher = RFC Editor, doi = 10.17487/RFC1654,
+url = https://www.rfc-editor.org/info/rfc1654, author = Yakov Rekhter
+and Tony Li, title = A Border Gateway Protocol 4 (BGP-4), pagetotal =
+56, year = 1994, month = jul, abstract = This document defines an
+inter-autonomous system routing protocol for the Internet.
+\[STANDARDS-TRACK\],
+
+\@miscrfc1771, series = Request for Comments, number = 1771,
+howpublished = RFC 1771, publisher = RFC Editor, doi = 10.17487/RFC1771,
+url = https://www.rfc-editor.org/info/rfc1771, author = Rekhter, Y. and
+T. Li, title = A Border Gateway Protocol 4 (BGP-4), pagetotal = 57, year
+= 1995, month = mar, abstract = This document, together with its
+companion document, \"Application of the Border Gateway Protocol in the
+Internet\", define an inter-autonomous system routing protocol for the
+Internet. \[STANDARDS-TRACK\],
+
+\@misccisco, author = Cisco Systems, Inc,
+url=https://crosswork.cisco.com/, title=Cisco Crosswork Cloud
+
+\@miscredes, author = Fabero Jiménez, J.C., publisher = Universidad
+Complutense de Madrid, title =Máster en Ingeniería Informática.
+Encaminamiento externo: BGPv4. Asignatura: Redes de Nueva Generación,
+pagetotal = 104,
+
+\@miscrfc4264, series = Request for Comments, number = 4264,
+howpublished = RFC 4264, publisher = RFC Editor, doi = 10.17487/RFC4264,
+url = https://www.rfc-editor.org/info/rfc4264, author = Tim A. Griffin
+and Geoff Huston, title = BGP Wedgies, pagetotal = 10, year = 2005,
+month = nov, abstract = It has commonly been assumed that the Border
+Gateway Protocol (BGP) is a tool for distributing reachability
+information in a manner that creates forwarding paths in a deterministic
+manner. In this memo we will describe a class of BGP configurations for
+which there is more than one potential outcome, and where forwarding
+states other than the intended state are equally stable. Also, the
+stable state where BGP converges may be selected by BGP in a
+non-deterministic manner. These stable, but unintended, BGP states are
+termed here \"BGP Wedgies\". This memo provides information for the
+Internet community.,
+
+\@miscrfc4271, series = Request for Comments, number = 4271,
+howpublished = RFC 4271, publisher = RFC Editor, doi = 10.17487/RFC4271,
+url = https://www.rfc-editor.org/info/rfc4271, author = Yakov Rekhter
+and Susan Hares and Tony Li, title = A Border Gateway Protocol 4
+(BGP-4), pagetotal = 104, year = 2006, month = jan, abstract = This
+document discusses the Border Gateway Protocol (BGP), which is an
+inter-Autonomous System routing protocol. The primary function of a BGP
+speaking system is to exchange network reachability information with
+other BGP systems. This network reachability information includes
+information on the list of Autonomous Systems (ASes) that reachability
+information traverses. This information is sufficient for constructing a
+graph of AS connectivity for this reachability from which routing loops
+may be pruned, and, at the AS level, some policy decisions may be
+enforced. BGP-4 provides a set of mechanisms for supporting Classless
+Inter-Domain Routing (CIDR). These mechanisms include support for
+advertising a set of destinations as an IP prefix, and eliminating the
+concept of network \"class\" within BGP. BGP-4 also introduces
+mechanisms that allow aggregation of routes, including aggregation of AS
+paths. This document obsoletes RFC 1771. \[STANDARDS-TRACK\],
+
+\@articleopenBMP, title=Bgp monitoring protocol (bmp), author=Scudder,
+John and Fernando, Rex and Stuart, Stephen, journal=Internet Engineering
+Task Force, pages=1--27, year=2016
 
 [^1]: Twitter Developer:
     <https://developer.twitter.com/en/portal/products>
