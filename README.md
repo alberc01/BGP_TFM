@@ -253,7 +253,7 @@ Developer* se asemejará al representado en la figura
 [1.3](#fig:twitDevACC){reference-type="ref" reference="fig:twitDevACC"}.
 
 ![Permisos *Academic Research* en Twitter, *fuente:
-<https://developer.twitter.com/en/portal/products>*[]{label="fig:twitDevACC"}](Imagenes/Bitmap/academic_research_plan.PNG){#fig:twitDevACC
+<https://developer.twitter.com/en/portal/products>*[]{label="fig:twitDevACC"}](IMG/CAP7/academic_research_plan.PNG){#fig:twitDevACC
 width="100%"}
 
 ### Asignación de credenciales dentro de BgpRS
@@ -266,7 +266,7 @@ y como se representa en la figura
 [1.3](#fig:twitDevACC){reference-type="ref" reference="fig:twitDevACC"}.
 
 ![Acceso a credenciales de Twitter, *fuente:
-<https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*[]{label="fig:twitDevACC"}](Imagenes/Bitmap/Credenciales_Twitter_web.PNG){#fig:twitDevACC
+<https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*[]{label="fig:twitDevACC"}](IMG/CAP7/Credenciales_Twitter_web.PNG){#fig:twitDevACC
 width="1.\textwidth"}
 
 Con estas credenciales en nuestra posesión, ya solo se necesita
@@ -277,7 +277,7 @@ variables mostradas en la figura
 [1.3](#fig:twitDevACC){reference-type="ref" reference="fig:twitDevACC"}.
 
 ![Archivo en BgpRS para introducir las credenciales de
-Twitter[]{label="fig:twitDevACC"}](Imagenes/Bitmap/Credenciales_Twitter.PNG){#fig:twitDevACC
+Twitter[]{label="fig:twitDevACC"}](IMG/CAP7/Credenciales_Twitter.PNG){#fig:twitDevACC
 width="80%"}
 
 Una vez realizados todos estos pasos, la aplicación será capaz de
@@ -299,7 +299,7 @@ de esta consola, se podrá crear un proyecto para posteriormente activar
 el servicio correspondiente de Google Drive.
 
 ![Credenciales de Google Drive, *fuente:
-<https://console.cloud.google.com/apis/credentials?authuser=1&project=phrasal-clover-312717>*[]{label="fig:credenGdriveP1"}](Imagenes/Bitmap/Credenciales_gdrive.png){#fig:credenGdriveP1
+<https://console.cloud.google.com/apis/credentials?authuser=1&project=phrasal-clover-312717>*[]{label="fig:credenGdriveP1"}](IMG/CAP7/Credenciales_gdrive.png){#fig:credenGdriveP1
 width="100%"}
 
 En la figura [1.4](#fig:credenGdriveP1){reference-type="ref"
@@ -350,7 +350,7 @@ porque ser idéntico, ya que de estas, como se vera mas adelante, solo se
 utilizará el identificador de las mismas.
 
 ![Distribución de carpetas en Google Drive, *fuente:
-<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*[]{label="fig:distribuGdrive"}](Imagenes/Bitmap/Distribu_gdrive.PNG){#fig:distribuGdrive
+<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*[]{label="fig:distribuGdrive"}](IMG/CAP7/Distribu_gdrive.PNG){#fig:distribuGdrive
 width="100%"}
 
 El contenido de estas carpetas tiene diferente significado para BgpRS.
@@ -376,7 +376,7 @@ identificadores se puede observar en la figura
 [1.6](#fig:folderids){reference-type="ref" reference="fig:folderids"}.
 
 ![Obtención de identificadores de carpeta, *fuente:
-<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>*[]{label="fig:folderids"}](Imagenes/Bitmap/Folder_ids_gdrive.PNG){#fig:folderids
+<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>*[]{label="fig:folderids"}](IMG/CAP7/Folder_ids_gdrive.PNG){#fig:folderids
 width="100%"}
 
 Una vez obtenidos cada uno de los identificadores, solo hace falta
@@ -389,7 +389,7 @@ sobre las variables que se resaltan en rojo en la figura
 reference="fig:IDSBGPRSGDRIVE"}.
 
 ![Asignación de identificadores de carpeta en
-BgpRS[]{label="fig:IDSBGPRSGDRIVE"}](Imagenes/Bitmap/Carpetas_gDrive_bgpRS.PNG){#fig:IDSBGPRSGDRIVE
+BgpRS[]{label="fig:IDSBGPRSGDRIVE"}](IMG/CAP7/Carpetas_gDrive_bgpRS.PNG){#fig:IDSBGPRSGDRIVE
 width="60%"}
 
 Con cada uno de estos pasos realizados, BgpRS estará capacitado para
@@ -419,7 +419,7 @@ reference="fig:accesorapid"}. La descripción de cada uno de estos
 botones se realizará en las secciones a continuación.
 
 ![Funcionalidades adicionales de
-BgpRS[]{label="fig:accesorapid"}](Imagenes/Bitmap/iface_bgp_datos.png){#fig:accesorapid
+BgpRS[]{label="fig:accesorapid"}](IMG/CAP7/iface_bgp_datos.png){#fig:accesorapid
 width="100%"}
 
 ### Actualización de datos vía Twitter
@@ -451,7 +451,7 @@ reflejado en la figura [1.9](#fig:ejecucionUPDATE){reference-type="ref"
 reference="fig:ejecucionUPDATE"}.
 
 ![Acción del proceso de actualizado de
-datos.[]{label="fig:ejecucionUPDATE"}](Imagenes/Bitmap/Ejecuta_update.PNG){#fig:ejecucionUPDATE
+datos.[]{label="fig:ejecucionUPDATE"}](IMG/CAP7/Ejecuta_update.PNG){#fig:ejecucionUPDATE
 width="80%"}
 
 Como se puede observar, en primer lugar se le preguntará al usuario si
@@ -462,7 +462,7 @@ notificará al usuario a través del mensaje reflejado en la figura
 reference="fig:dataupdated"}.
 
 ![Mensaje de notificación sobre el actualizado de
-datos[]{label="fig:dataupdated"}](Imagenes/Bitmap/data_updated_msg.png){#fig:dataupdated
+datos[]{label="fig:dataupdated"}](IMG/CAP7/data_updated_msg.png){#fig:dataupdated
 width="30%"}
 
 ### Datos sintéticos
@@ -485,7 +485,7 @@ figura [1.11](#fig:seleccionArch){reference-type="ref"
 reference="fig:seleccionArch"}.
 
 ![Selección de archivo estático para aumentar los datos
-disponibles[]{label="fig:seleccionArch"}](Imagenes/Bitmap/sleccion_archiv_estatic.png){#fig:seleccionArch
+disponibles[]{label="fig:seleccionArch"}](IMG/CAP7/sleccion_archiv_estatic.png){#fig:seleccionArch
 width="80%"}
 
 Después de seleccionar el archivo, se solicitará confirmación al usuario
@@ -502,7 +502,7 @@ por la aplicación, por lo que si se desea contemplar otros datos deberá
 eliminarse o modificarse en Google Drive.
 
 ![Confirmación de cargado de datos
-estáticos[]{label="fig:confirmastatic"}](Imagenes/Bitmap/confirma_static.PNG){#fig:confirmastatic
+estáticos[]{label="fig:confirmastatic"}](IMG/CAP7/confirma_static.PNG){#fig:confirmastatic
 width="30%"}
 
 ### Limitaciones para el usuario
@@ -526,7 +526,7 @@ encargará de advertirle mediante el mensaje ilustrado en la figura
 reference="fig:limitacionesUsu"}.
 
 ![Limitaciones al actualizar los datos
-[]{label="fig:limitacionesUsu"}](Imagenes/Bitmap/Limitacion_usuario.png){#fig:limitacionesUsu
+[]{label="fig:limitacionesUsu"}](IMG/CAP7/Limitacion_usuario.png){#fig:limitacionesUsu
 width="100%"}
 
 \@bookKonstantinos, author = Konstantinos Arakadakis, title = BGPstream
