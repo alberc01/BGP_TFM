@@ -702,3 +702,4 @@ Task Force, pages=1--27, year=2016
 [^3]: Información obtenida en el paso 4 de la imagen
     [1.4](#fig:credenGdriveP1){reference-type="ref"
     reference="fig:credenGdriveP1"}
+
