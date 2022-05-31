@@ -199,19 +199,22 @@ class PR_BGP(BGP):
 
     def construct_vtysh_commands_ot(self, asn, pref):
         # El filtrado solo debe contemplar aquellos anuncion en los que el asn esta en medio del AS_PATH
-        asn_filter = '_'+ asn.replace('AS','')  + '_'
+        asn_filter = '.+_'+ asn.replace('AS','')  + '_.+'
         string = "\
 ! Router section   \n\
 router bgp <YOUR ASN NUMBER> \n\
     ! <a.b.c.d> is the IP direction of the router BGP neighbour\n\
     neighbor <a.b.c.d> remote_as " + asn.replace('AS','') + "\n\
-    neighbor <a.b.c.d> route-map BgpRS_RM " + asn.replace('AS','')  + " in \n\
+    neighbor <a.b.c.d> route-map BgpRS_RM in \n\
 ! Access-list declaration section \n\
-ip access-list BgpRS_RECOM permit "+ asn_filter+ " !Filter to find all routes in AS_PATH where the AS problem causer is between \n\
+ip as-path access-list BgpRS_RECOM permit "+ asn_filter+ " !Filter to find all routes in AS_PATH where the AS problem causer is between \n\
+ip as-path access-list Others permit .* \n\
 ! Route-map declaration section \n\
 route-map BgpRS_RM permit 10 \n\
-    match as-path BgpRS_RECOM\n\
-    set local-prefence (- " + str(pref)+ ")" 
+    match as-path BgpRS_RECOM \n\
+    set local-prefence (- " + str(pref)+ ")\n\
+route-map BgpRS_RM permit 20 \n\
+    match as-path Others \n"
         return string
     
 
@@ -223,11 +226,16 @@ route-map BgpRS_RM permit 10 \n\
 router bgp <YOUR ASN NUMBER> \n\
     ! <a.b.c.d> is the IP direction of the router BGP neighbour\n\
     neighbor <a.b.c.d> remote_as " + asn.replace('AS','') + "\n\
-    neighbor <a.b.c.d> route-map BgpRS_RM " + asn.replace('AS','') + " in \n\
+    ! For each neigbour \n\
+    neighbor <a.b.c.d> route-map BgpRS_RM in \n\
 ! Access-list declaration section \n\
-ip access-list BgpRS_RECOM permit "+ asn_filter + " ! Filter to find all routes in AS_PATH where the AS problem is origin \n\
+ip as-path access-list BgpRS_RECOM permit "+ asn_filter + " ! Filter to find all routes in AS_PATH where the AS problem is origin \n\
+ip as-path access-list Others permit .* \n\
 ! Route-map declaration section \n\
 route-map BgpRS_RM permit 10 \n\
-    match as-path BgpRS_RECOM\n\
-    set local-prefence (- " + str(pref)+ ")" 
+    match as-path BgpRS_RECOM \n\
+    set local-prefence (- " + str(pref)+ ")\n\
+route-map BgpRS_RM permit 20 \n\
+    match as-path Others \n"
+        
         return string
