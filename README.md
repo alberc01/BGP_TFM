@@ -1,9 +1,9 @@
 # BGP_TFM
 ---
-bibliography: biblio.bib
+bibliography: (./biblio.bib)
 ---
 
-Introducción {#cap:introduccion}
+Introducción
 ============
 
 Internet es una herramienta que proporciona multitud de servicios a la
@@ -170,32 +170,14 @@ concreto, proporcionando instrucciones de configuración para evitar
 redirigir el tráfico por aquellos AS que hayan sido considerados como no
 fiables.
 
-Puesta en marcha de la aplicación {#cap:APLICACION}
+Puesta en marcha de la aplicación
 =================================
 
-A lo largo de esta memoria se han podido visualizar las características
-de la aplicación BgpRS. Por una parte, en el capitulo
-[\[cap:infobgp\]](#cap:infobgp){reference-type="ref"
-reference="cap:infobgp"}, se han explicado los aspectos relevantes para
-extraer información de BGP. Además, se ha podido ver que esta
-información es fundamental para la aplicación, dando servicio a las
-funcionalidades vistas en los capítulos
-[\[cap:asnPaises\]](#cap:asnPaises){reference-type="ref"
-reference="cap:asnPaises"} y
-[\[cap:sistemasRecomendacionBGP\]](#cap:sistemasRecomendacionBGP){reference-type="ref"
-reference="cap:sistemasRecomendacionBGP"}. Para hacer todo esto posible,
-BgpRS utiliza multitud de servicios.
-
-Estos servicios son accesibles a través de diferentes librerías
-disponibles en Python, por lo que será necesario instalar ciertas
-dependencias antes de poder ejecutar BgpRS. En los apéndices de la
-memoria se proporciona un enlace al código de BgpRS, dentro de este
-proyecto se encuentra la carpeta denominada
+Dentro de este proyecto se encuentra la carpeta denominada
 `/dependencies_installation_dir` que contiene el archivo
 `requirements.txt` con la información de las dependencias necesarias.
 
-Conociendo todo esto y teniendo en cuenta que BgpRS actualmente solo
-esta preparado para funcionar en distribuciones de Linux, se debe
+BgpRS actualmente solo esta preparado para funcionar en distribuciones de Linux, se debe
 proceder a crear un entorno virtual de Python3 para instalar las citadas
 dependencias. Esto ultimo se puede realizar mediante los pasos
 enumerados a continuación.
@@ -350,8 +332,8 @@ porque ser idéntico, ya que de estas, como se vera mas adelante, solo se
 utilizará el identificador de las mismas.
 
 ![Distribución de carpetas en Google Drive, *fuente:
-<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*[]{label="fig:distribuGdrive"}](IMG/CAP7/Distribu_gdrive.PNG){#fig:distribuGdrive
-width="100%"}
+<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*[]{label="fig:distribuGdrive"}](IMG/CAP7/Distribu_gdrive.PNG)[#fig:distribuGdrive
+width="100%"]
 
 El contenido de estas carpetas tiene diferente significado para BgpRS.
 Por un lado, la carpeta `/Scrapped_From_Twitter` contendrá el archivo
