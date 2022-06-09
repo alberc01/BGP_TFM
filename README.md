@@ -1,174 +1,19 @@
 # BGP_TFM
----
-bibliography: (./biblio.bib)
----
 
-Introducción
+Resumen
 ============
 
-Internet es una herramienta que proporciona multitud de servicios a la
-sociedad a través de diversos protocolos de comunicación. Cada uno de
-estos protocolos, con funciones determinadas, hacen posible el
-funcionamiento de la fuente de información más grande del mundo. Es
-complejo conseguir la coordinación de cada uno de los elementos de
-Internet, en ocasiones los protocolos encargados de dicha tarea incluyen
-características de configuración que pueden afectar a su correcto
-funcionamiento.
+**Sistema de recomendación de políticas de tráfico BGP**
 
-Según la función que desempeñen, los protocolos de red se pueden
-clasificar mediante el modelo OSI (*Open System Interconnection*). De
-esta forma, si se busca establecer comunicación entre dos nodos o
-dispositivos en una red de comunicación, este modelo define las
-diferentes etapas que deberán atravesar los datos para su envío. La capa
-de red contemplada en este modelo se encarga del direccionamiento lógico
-y mediante protocolos como IP (*Internet Protocol*) u OSPF (*Open
-Shortest Path First*) determina la mejor ruta para el envío óptimo de
-los datos.
+Las tecnologías de la información y comunicación son áreas de investigación en constante crecimiento. Los numerosos avances del sector proporcionan herramientas para acceder a una gran variedad de información y servicios desde cualquier parte del mundo. Estas herramientas se podrían resumir en una única palabra, Internet.
 
-El objetivo principal de este trabajo es el estudio del protocolo BGP.
-No existe un criterio único para posicionar este protocolo en una de las
-capas del modelo OSI. Este protocolo se encarga de la construcción de
-las rutas globales de Internet, permitiendo alcanzar a cada uno de los
-destinos presentes en la red. La tarea que realiza BGP es esencial para
-el correcto funcionamiento de Internet, sin embargo y como se verá más
-adelante, tiene algunas peculiaridades que son dignas de estudio.
+Internet es una herramienta de carácter global cuyo funcionamiento es posible gracias a complejos mecanismos y protocolos desarrollados a lo largo de la historia. Cada uno de estos mecanismos se encarga de gestionar una característica concreta, siendo BGP (*Border Gateway Protocol*) uno de los protocolos más relevantes sobre los que se sostiene Internet. Sin embargo, este protocolo que se encarga del intercambio de información de encaminamiento global, es gestionado y configurado de manera local por los diferentes ISP (*Internet Service Provider*), empresas tecnológicas, universidades, agencias gubernamentales e instituciones científicas. Esto hace que los intereses particulares de algunas entidades intervengan en el encaminamiento del tráfico de red, causando en ocasiones ciertos problemas.
 
-Motivación
-----------
+En este trabajo se presenta un estudio acerca de los diferentes problemas que alberga este protocolo, proporcionando un medio para observar los eventos que se producen y recomendando posibles configuraciones con el fin de evitar interrupciones de servicio inesperadas o el secuestro indeseado de prefijos.
 
-Internet se puede ver como un gran grafo, donde los vértices serían los
-encargados de gestionar y realizar el intercambio de la información. Uno
-de los protocolos más importantes para poder realizar esta tarea es BGP.
-
-Este protocolo proporciona mecanismos para el intercambio de información
-de encaminamiento entre los diferentes sistemas que componen la red.
-Dentro de la terminología BGP, los nodos que componen una red BGP se
-denominan Sistemas Autónomos (AS, *Autonomous System*), los cuales se
-identifican mediante un número único o ASN (*Autonomous System Number*).
-
-De esta forma, el protocolo se encarga de establecer las rutas óptimas
-por las cuales el tráfico será dirigido. Para poder establecer estas
-rutas, el propio protocolo dota de diferentes opciones de configuración
-que se gestionan de manera local por diferentes AS. Sin embargo, queda
-por definir que es una ruta óptima, puesto que cada sistema autónomo
-puede tener unos intereses particulares distintos.
-
-La gran versatilidad a la hora de configurar y determinar las diferentes
-rutas que seguirá el tráfico de red significa un gran beneficio a favor
-del protocolo BGP. Sin embargo, como se trata de una herramienta de
-carácter global cuya gestión se realiza de manera local, existe el
-riesgo de que se pueda manipular en pro de diferentes intereses
-económicos y geopolíticos.
-
-Debido a esto ultimo, se pueden encontrar multitud de estudios que
-pretenden identificar cuando uno de estos Sistemas Autónomos no trabaja
-como debería, es decir, cuando el sistema no intercambia la información
-adecuada debido a una mala configuración local, ya sea de forma
-deliberada o no.
-
-De la misma forma, también existen herramientas a disposición del
-público que se encargan de monitorizar las actualizaciones BGP, tratando
-de determinar un posible anuncio fraudulento (*Hijack*), una posible
-caída de servicio (*Outage*) o una filtración indebida de prefijos (*BGP
-Leak*) durante el intercambio de información entre los Sistemas
-Autónomos.
-
-BGPStream [@orsini2016bgpstream] es un producto de la compañía Cisco
-Systems [@cisco]. Esta herramienta, mediante la plataforma social
-Twitter, publica información relevante acerca de los eventos que puedan
-significar algún riesgo relacionado con BGP.
-
-A lo largo de la historia de BGP se han podido experimentar multitud de
-problemas como consecuencia de una mala configuración, produciendo un
-cambio sustancial en el tránsito del tráfico de red o la inaccesibilidad
-a Internet. Un ejemplo de estas consecuencias se pudo ver el 4 de
-Octubre de 2021 [@bgp-facebook], donde Facebook debido a una mala
-configuración de las tablas de rutas de BGP quedó inaccesible a través
-de Internet, produciendo la caída en cadena de las redes sociales
-(Whatsapp e Instagram) más utilizadas por los usuarios y la interrupción
-del servicio de otras empresas dependientes de Facebook como proveedor.
-
-Este es solo un ejemplo de los posibles problemas que puede presentar
-este protocolo de encaminamiento, pero existen muchos otros de gran
-relevancia. En la actualidad se puede entrever que los datos y la
-información que transitan por la red cobran cada vez más importancia
-debido a multitud de intereses económicos, sociales, políticos, etc. Si
-se enfoca este problema desde un punto de vista internacional, una
-alteración en el tránsito del tráfico de red puede significar una
-sustracción de información sensible para las diferentes entidades
-geopolíticas mundiales o su aislamiento en Internet.
-
-Objetivos
----------
-
-En el presente TFM se presenta un sistema de recomendación en forma de
-aplicación, la cual se ha denominado BgpRS (*BGP Recommendation
-System*). Esta aplicación, mediante los datos publicados por
-Cisco [@cisco], proporciona recomendaciones para la configuración de
-*routers* BGP con el fin de intentar evitar aquellos Sistemas Autónomos
-que puedan significar algún riesgo. Además, BgpRS proporciona
-herramientas para la visualización de datos, habilitando al usuario de
-la capacidad de realizar un estudio histórico sobre los diferentes
-eventos sucedidos en BGP. Por ejemplo, la presente guerra entre la
-Federación Rusa y Ucrania puede servir como guía para observar que BGP
-no es un simple protocolo de red. Los Sistemas Autónomos de estos países
-producen eventos como los mencionados anteriormente de manera diaria. Si
-mediante BgpRS se seleccionan diferentes momentos en el tiempo antes y
-después de la guerra, y se comparan los sucesos BGP de cada uno de estos
-países, se puede visualizar el impacto que tiene la guerra sobre
-Internet.
-
-Los errores de configuración de los *routers* BGP, pueden desencadenar
-interrupciones de tráfico o el desvío del mismo. Por esta razón, surge
-la idea de clasificar los Sistemas Autónomos según su histórico de
-incidentes. Las tendencias obtenidas a través de los datos sobre los
-eventos, permiten que la aplicación BgpRS informe a los administradores
-BGP sobre la forma más adecuada para tratar a un Sistema Autónomo cuyo
-comportamiento es errático, utilizando para ello instrucciones `vtysh`
-contempladas en Quagga o FRRouting y que son fácilmente aplicables a
-Cisco CLI [@cisco].
-
-Plan de trabajo
----------------
-
-En el protocolo BGP se producen numerosos eventos durante su
-funcionamiento, aparición o desaparición de rutas, incorporación nuevos
-AS, etc. En este trabajo, no es necesario el uso de cada uno de estos
-eventos, ya que solo se necesitan aquellos que impliquen una caída de
-servicio (*Outage*) o un cambio en el origen de prefijos (*Hijack*).
-
-La extracción de estos datos supone un requisito necesario para la
-realización de este trabajo. Sin embargo, cabe destacar que el filtrado
-y la clasificación de los datos requiere de un gran número de recursos
-no disponibles y que son accesibles, por ejemplo, mediante *BGP Looking
-Glasses*. Por dicha razón, esta tarea será realizada por las
-herramientas BGPStream [@orsini2016bgpstream] y BGPMon [@yan2009bgpmon],
-y mediante el uso de la información que estas proporcionan será posible
-mantener un histórico consistente que servirá a la aplicación BgpRS.
-
-Las herramientas de Cisco [@cisco] anteriormente citadas, por una parte
-se encargan de nutrir su propia base de datos histórica, sin embargo, el
-acceso a estos datos se realiza a traves de su API de pago. Por otro
-lado, Cisco también publica en Twitter de forma gratuita la información
-de los eventos que identifica mediante estas herramientas. Uno de los
-objetivos de este trabajo es proporcionar una opción gratuita para el
-estudio de los eventos que se producen en BGP. Esto se puede realizar a
-través de la extracción de la información disponible en Twitter, por lo
-que la API de esta red social es una herramienta adicional para obtener
-gran parte de la información necesaria.
-
-Con toda la información recopilada, se procederá a realizar una
-clasificación por países de los eventos, asociando el evento con el AS
-que lo produjo y la organización al mando. De esta forma, se podrá
-visualizar el impacto o las tendencias internacionales de utilizar BGP
-como medio para cubrir intereses particulares.
-
-Por último, a través de los diferentes datos obtenidos se procederá a
-construir el mencionado Sistema de Recomendación BGP. Este sistema será
-capaz de determinar cómo de necesario es tomar medidas para un AS
-concreto, proporcionando instrucciones de configuración para evitar
-redirigir el tráfico por aquellos AS que hayan sido considerados como no
-fiables.
+**Palabras clave**
+   
+BGP (*Border Gateway Protocol*), AS (*Autonomous System*), *Outages*, *Hijacks*, BGPMon, BGPStream
 
 Puesta en marcha de la aplicación
 =================================
