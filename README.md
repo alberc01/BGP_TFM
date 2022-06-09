@@ -72,11 +72,10 @@ será necesario el intercambio de cierta cantidad de *e-mails*.
 Una ver realizado todo esto, sera posible crear un proyecto con el fin
 de poder dar acceso a los servicios a la aplicación BgpRS. Si todo el
 proceso se ha realizado correctamente, el nuevo perfil de *Twitter
-Developer* se asemejará al representado en la <a href="#credenAcc">Figura 1</.
+Developer* se asemejará al representado en la <a href="#academicRese">Figura 1</a>.
 
 <a name="academicRese">![Permisos *Academic Research* en Twitter, *fuente:
-<https://developer.twitter.com/en/portal/products>*]
-(IMG/CAP7/academic_research_plan.PNG) Permisos *Academic Research* en Twitter, *fuente:
+<https://developer.twitter.com/en/portal/products>*](IMG/CAP7/academic_research_plan.PNG)Permisos *Academic Research* en Twitter, *fuente:
 <https://developer.twitter.com/en/portal/products>*</a>
 
 ### Asignación de credenciales dentro de BgpRS
@@ -99,9 +98,8 @@ mediante la modificación del archivo `twitterDevCredentials.py` situado
 en la carpeta `/API_classes`, asignando valor a cada una de las
 variables mostradas en la <a href="#credenTwit">Figura 3</a>.
 
-<a name="credenTwit">![Archivo en BgpRS para introducir las credenciales de
-Twitter](IMG/CAP7/Credenciales_Twitter.PNG) Archivo en BgpRS para introducir las credenciales de
-Twitter</a>
+<a name="credenTwit">![Archivo en BgpRS para introducir las credenciales de Twitter](IMG/CAP7/Credenciales_Twitter.PNG)</a>
+ Archivo en BgpRS para introducir las credenciales de Twitter
 
 
 Una vez realizados todos estos pasos, la aplicación será capaz de
@@ -128,7 +126,7 @@ el servicio correspondiente de Google Drive.
 
 
 
-En la <a href="#folderids">Figura 4</a> se representa el proceso para crear y
+En la <a href="#credenDrive">Figura 4</a> se representa el proceso para crear y
 obtener las credenciales necesarias para hacer uso de las
 funcionalidades de PyDrive [@pydrive]. En primer lugar, se deberá
 ingresar en el menú de `API y servicios`, y dentro de este, en el
@@ -168,7 +166,7 @@ realizar esta acción en las próximas ejecuciones.
 Con los pasos realizados anteriormente, ya solo es necesario crear una
 carpeta de Drive donde BgpRS almacenará y obtendrá la diferente
 información. Esta carpeta, deberá estar organizada de manera similar a
-la representada en la <a href="#folderids">Figura 5</a> . El nombre de estas carpetas no tiene
+la representada en la <a href="#distriDrive">Figura 5</a> . El nombre de estas carpetas no tiene
 porque ser idéntico, ya que de estas, como se vera mas adelante, solo se
 utilizará el identificador de las mismas.
 
@@ -220,138 +218,6 @@ Con cada uno de estos pasos realizados, BgpRS estará capacitado para
 almacenar y obtener la información necesaria para su funcionamiento,
 proporcionando la posibilidad de obtener, actualizar y analizar los
 datos al usuario a través su interfaz gráfica.
-
-Interfaz gráfica
-----------------
-
-En los capítulos
-[\[cap:asnPaises\]](#cap:asnPaises){reference-type="ref"
-reference="cap:asnPaises"} y
-[\[cap:sistemasRecomendacionBGP\]](#cap:sistemasRecomendacionBGP){reference-type="ref"
-reference="cap:sistemasRecomendacionBGP"} se han podido observar las
-funcionalidades principales de BgpRS. Sin embargo, existen otras
-funcionalidades adicionales que el usuario puede realizar a través de la
-interfaz gráfica.
-
-A lo largo de este capitulo, se han explicado cada uno de los aspectos
-necesarios para que la aplicación pudiese utilizar las funcionalidades
-de obtención y almacenamiento de la información. Para que el usuario
-pudiese ejecutar estas funcionalidades de manera sencilla, se decidió
-implementar los accesos rápidos de la interfaz que se observan en la
-figura [1.8](#fig:accesorapid){reference-type="ref"
-reference="fig:accesorapid"}. La descripción de cada uno de estos
-botones se realizará en las secciones a continuación.
-
-![Funcionalidades adicionales de
-BgpRS[]{label="fig:accesorapid"}](IMG/CAP7/iface_bgp_datos.png){#fig:accesorapid
-width="100%"}
-
-### Actualización de datos vía Twitter
-
-Una de las posibilidades que se le proporcionan al usuario es la
-posibilidad de obtener y actualizar los datos a través de la API de
-Twitter. Este proceso esta automatizado, de tal forma que si el usuario
-no posee datos en las carpetas de su Google Drive, obtendrá los 3500
-*tweets* mas recientes del usuario *\@bgpstream* y los clasificara para
-la aplicación, generando los archivos correspondientes en las carpetas
-`/Scrapped_From_Twitter` y `/Classified_By_BgpRS` mencionadas
-anteriormente.
-
-Si por el contrario, el usuario ya posee datos en estas carpetas, la
-aplicación se encargara de actualizarlos. En este aspecto, cabe destacar
-que la aplicación puede tardar varios minutos, ya que depende de la
-cantidad de datos que se obtengan. Además, como en ocasiones el comando
-`whois` puede no haber obtenido el país de cada uno de los eventos BGP,
-con el fin de mejorar la calidad de datos, se decidió que la aplicación
-reclasificara los datos que ya poseyese, ralentizando este proceso en
-gran medida.
-
-Por esta razón, para que el usuario no estuviese esperando
-infinitamente, se decidió implementar un hilo de proceso independiente
-para realizar este tipo de acciones, por lo que el usuario podrá
-examinar los datos ya clasificados mientras espera.El proceso de
-ejecución de este botón desde el punto de vista del usuario se puede ver
-reflejado en la figura [1.9](#fig:ejecucionUPDATE){reference-type="ref"
-reference="fig:ejecucionUPDATE"}.
-
-![Acción del proceso de actualizado de
-datos.[]{label="fig:ejecucionUPDATE"}](IMG/CAP7/Ejecuta_update.PNG){#fig:ejecucionUPDATE
-width="80%"}
-
-Como se puede observar, en primer lugar se le preguntará al usuario si
-realmente quiere actualizar los datos. Después de que el usuario de
-confirmación, el proceso de actualizado comenzará y al finalizar
-notificará al usuario a través del mensaje reflejado en la figura
-[1.10](#fig:dataupdated){reference-type="ref"
-reference="fig:dataupdated"}.
-
-![Mensaje de notificación sobre el actualizado de
-datos[]{label="fig:dataupdated"}](IMG/CAP7/data_updated_msg.png){#fig:dataupdated
-width="30%"}
-
-### Datos sintéticos
-
-En la sección
-[\[secc:CreadatosEstaticos\]](#secc:CreadatosEstaticos){reference-type="ref"
-reference="secc:CreadatosEstaticos"} se ha explicado detalladamente como
-construir un archivo de datos para la alimentación estática de la
-aplicación, el cual debe seguir cierta sintaxis. El botón de la
-interfaz, `Load static file`, permite al usuario seleccionar un archivo
-local, que mantenga dicha sintaxis, para incorporar los datos a BgpRS.
-
-La ejecución de esta funcionalidad, se hace a través de un hilo
-independiente de la misma manera que para el actualizado de datos de
-Twitter. Después que el usuario pulse sobre el botón de
-`Load static file`, la aplicación desplegará un navegador de archivos.
-Mediante este navegador, el usuario podrá seleccionar el archivo `Json`
-que desee cargar. Este comportamiento se puede ver ilustrado en la
-figura [1.11](#fig:seleccionArch){reference-type="ref"
-reference="fig:seleccionArch"}.
-
-![Selección de archivo estático para aumentar los datos
-disponibles[]{label="fig:seleccionArch"}](IMG/CAP7/sleccion_archiv_estatic.png){#fig:seleccionArch
-width="80%"}
-
-Después de seleccionar el archivo, se solicitará confirmación al usuario
-mediante el mensaje que se representa en la figura
-[1.12](#fig:confirmastatic){reference-type="ref"
-reference="fig:confirmastatic"}. Tras la finalización de la
-clasificación de la nueva información, se generará un archivo adicional
-que será almacenado en la carpeta `/Posible_Extended_Data`. La
-finalización de la asignación de contenido en este archivo, será
-notificada a través de un mensaje como el ilustrado en la figura
-[1.10](#fig:dataupdated){reference-type="ref"
-reference="fig:dataupdated"}. Este archivo, será utilizado en adelante
-por la aplicación, por lo que si se desea contemplar otros datos deberá
-eliminarse o modificarse en Google Drive.
-
-![Confirmación de cargado de datos
-estáticos[]{label="fig:confirmastatic"}](IMG/CAP7/confirma_static.PNG){#fig:confirmastatic
-width="30%"}
-
-### Limitaciones para el usuario
-
-Para finalizar con este capitulo, hace falta mencionar que el usuario
-dispone de ciertas limitaciones con respecto a la obtención de datos.
-Por motivos de simplicidad y para evitar posibles problemas a nivel
-software, se decidió que la aplicación solo pudiese mantener, de manera
-concurrente, dos hilos de ejecución. Por una parte, un hilo principal
-para conservar la aplicación en estado de ejecución, y por otra, otro
-hilo independiente para realizar alguna de las acciones de modificación
-de datos.
-
-En consecuencia de esto ultimo, si el usuario ya ha emprendido alguna de
-las acciones disponibles para modificar el conjunto de datos, deberá
-esperar a que la acción finalice para realizar una nueva acción del
-mismo estilo. Por esta razón, si el usuario intenta realizar dos
-acciones de modificación de datos de manera simultanea, la aplicación se
-encargará de advertirle mediante el mensaje ilustrado en la figura
-[1.13](#fig:limitacionesUsu){reference-type="ref"
-reference="fig:limitacionesUsu"}.
-
-![Limitaciones al actualizar los datos
-[]{label="fig:limitacionesUsu"}](IMG/CAP7/Limitacion_usuario.png){#fig:limitacionesUsu
-width="100%"}
 
 [^1]: Twitter Developer:
     <https://developer.twitter.com/en/portal/products>
