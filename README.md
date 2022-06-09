@@ -98,8 +98,9 @@ mediante la modificación del archivo `twitterDevCredentials.py` situado
 en la carpeta `/API_classes`, asignando valor a cada una de las
 variables mostradas en la <a href="#credenTwit">Figura 3</a>.
 
-<a name="credenTwit">![Archivo en BgpRS para introducir las credenciales de Twitter](IMG/CAP7/Credenciales_Twitter.PNG)</a>
+<a name="credenTwit">![Archivo en BgpRS para introducir las credenciales de Twitter](IMG/CAP7/Credenciales_Twitter.PNG)<br>
  Archivo en BgpRS para introducir las credenciales de Twitter
+</a>
 
 
 Una vez realizados todos estos pasos, la aplicación será capaz de
@@ -198,7 +199,7 @@ identificadores se puede observar en la <a href="#folderids">Figura 6</a>.
 
 <a name="folderids">![Obtención de identificadores de carpeta, *fuente:
 <https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>](IMG/CAP7/Folder_ids_gdrive.PNG)Obtención de identificadores de carpeta, *fuente:
-<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK></a>
+<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>*</a>
 
 
 Una vez obtenidos cada uno de los identificadores, solo hace falta
@@ -206,13 +207,13 @@ indicarlos en la parte correspondiente del código de BgpRS. Esta
 asignación, debe realizarse en el archivo `Data_classifier_class.py` que
 se encuentra situado dentro de la carpeta `/API_classes`. Según esto
 ultimo, el valor de estos identificadores de carpeta se deberá indicar
-sobre las variables que se resaltan en rojo en la figura
-[1.7](#fig:IDSBGPRSGDRIVE){reference-type="ref"
-reference="fig:IDSBGPRSGDRIVE"}.
+sobre las variables que se resaltan en rojo en la <a href="#carpetasDriv">Figura 7</a>.
 
-![Asignación de identificadores de carpeta en
-BgpRS[]{label="fig:IDSBGPRSGDRIVE"}](IMG/CAP7/Carpetas_gDrive_bgpRS.PNG){#fig:IDSBGPRSGDRIVE
-width="60%"}
+   
+ <a name="carpetasDriv">![Asignación de identificadores de carpeta en BgpRS](IMG/CAP7/Carpetas_gDrive_bgpRS.PNG)<br>
+ Obtención de identificadores de carpeta, *fuente:
+<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>*</a>
+
 
 Con cada uno de estos pasos realizados, BgpRS estará capacitado para
 almacenar y obtener la información necesaria para su funcionamiento,
