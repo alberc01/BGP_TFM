@@ -36,7 +36,7 @@ enumerados a continuación.
     `pip install -r dependencies_installation_dir/requirements.txt`
 
 De todas las dependencias que se instalaran, podría decirse que las mas
-relevantes son las librerías de TweePy [@tweepy] y Pydrive [@pydrive].
+relevantes son las librerías de *TweePy* y *Pydrive*.
 Es importante destacar que estas dos librerías necesitan de permisos y
 la asignación de credenciales para cumplir con su cometido, siendo
 necesaria su especificación en el código de la aplicación. En
@@ -55,12 +55,7 @@ continuación.
 
 En primer lugar, es necesario puntualizar que BgpRS utiliza funciones de
 esta API que solo están disponibles con los permisos que otorga el plan
-*Academic Research* de Twitter, la necesidad de esto se ha podido ver en
-detalle en la sección
-[\[sec:problemasObInfo\]](#sec:problemasObInfo){reference-type="ref"
-reference="sec:problemasObInfo"} de esta memoria. Por ello, el primer
-paso necesario para poner en marcha la aplicación será solicitar acceso
-a al plan mencionado.
+*Academic Research* de Twitter.
 
 Para poder realizar la solicitud correspondiente, primero se debe tener
 una cuenta de Twitter para realizar el registro en la plataforma
@@ -81,7 +76,7 @@ Developer* se asemejará al representado en la <a href="#academicRese">Figura 1<
 ### Asignación de credenciales dentro de BgpRS
 
 Una vez obtenido el acceso al plan *Academic Research*, será posible
-obtener las credenciales necesarias para que TweePy [@tweepy] pueda
+obtener las credenciales necesarias para que TweePy pueda
 ejecutar las solicitudes de BgpRS. El acceso a estas credenciales y su
 lectura se puede realizar a través del portal *developer* de Twitter tal
 y como se representa en la <a href="#credenAcc">Figura 2</a>.
@@ -129,7 +124,7 @@ el servicio correspondiente de Google Drive.
 
 En la <a href="#credenDrive">Figura 4</a> se representa el proceso para crear y
 obtener las credenciales necesarias para hacer uso de las
-funcionalidades de PyDrive [@pydrive]. En primer lugar, se deberá
+funcionalidades de PyDrive. En primer lugar, se deberá
 ingresar en el menú de `API y servicios`, y dentro de este, en el
 apartado de `Credenciales` para crear unas del tipo
 `ID de cliente de OAuth`. Para completar el proceso se deberán rellenar
@@ -143,15 +138,19 @@ presionamos este botón, se desplegará una pestaña como la resaltada en
 color morado (4) y se podrán obtener las credenciales que necesita
 BgpRS.
 
-Dentro del proyecto de BgpRs, se deberá crear un archivo de extensión
-`.yaml`, que deberá denominarse `settings.yaml` y deberá situarse en la
-raíz siguiendo la imagen
-[\[fig:OrgDirectorios\]](#fig:OrgDirectorios){reference-type="ref"
-reference="fig:OrgDirectorios"}. Este archivo, servirá para indicar las
-credenciales de Google Drive a la aplicación BgpRS, por lo que deberá
-poseer la información representada en la imagen
-[\[fig:credenGdriveYaml\]](#fig:credenGdriveYaml){reference-type="ref"
-reference="fig:credenGdriveYaml"}.
+Dentro del proyecto de BgpRs, se deberá crear un archivo de extensión `.yaml`, 
+que deberá denominarse `settings.yaml` y que deberá situarse en la raíz del proyecto
+(<a href="#orgDriecPr">Figura 5</a>). Este archivo, servirá para indicar las credenciales de Google Drive 
+a la aplicación BgpRS, para lo que se deberá cumplimentar la información representada en la <a href="#yamfile">Imagen 6</a>.
+
+<a name="orgDriecPr">![Organizacion de directorios del proyecto](IMG/CAP7/directorios_bgprs.png)<br></a>
+Organizacion de directorios del proyecto
+   
+   
+<a name="yamfile">![Contenido de settings.yaml](IMG/CAP7/yaml_gdrive.PNG)</a>  
+Contenido de `settings.yaml`
+
+   
 
 En el archivo `settings.yaml`, se deberá dar valor a los campos
 `client_secret` y `client_id` con la información de las credenciales de
@@ -167,7 +166,7 @@ realizar esta acción en las próximas ejecuciones.
 Con los pasos realizados anteriormente, ya solo es necesario crear una
 carpeta de Drive donde BgpRS almacenará y obtendrá la diferente
 información. Esta carpeta, deberá estar organizada de manera similar a
-la representada en la <a href="#distriDrive">Figura 5</a> . El nombre de estas carpetas no tiene
+la representada en la <a href="#distriDrive">Figura 7</a> . El nombre de estas carpetas no tiene
 porque ser idéntico, ya que de estas, como se vera mas adelante, solo se
 utilizará el identificador de las mismas.
 
@@ -195,7 +194,7 @@ identificadores, ya que como se ha mencionado, la aplicación necesitara
 conocer su valor. Esta información se puede extraer del mismo navegador,
 ya que en la ultima parte de la *url* de cada una de estas carpetas se
 encuentra su identificador. El proceso de obtención de estos
-identificadores se puede observar en la <a href="#folderids">Figura 6</a>.
+identificadores se puede observar en la <a href="#folderids">Figura 8</a>.
 
 <a name="folderids">![Obtención de identificadores de carpeta, *fuente:
 <https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>](IMG/CAP7/Folder_ids_gdrive.PNG)Obtención de identificadores de carpeta, *fuente:
@@ -207,7 +206,7 @@ indicarlos en la parte correspondiente del código de BgpRS. Esta
 asignación, debe realizarse en el archivo `Data_classifier_class.py` que
 se encuentra situado dentro de la carpeta `/API_classes`. Según esto
 ultimo, el valor de estos identificadores de carpeta se deberá indicar
-sobre las variables que se resaltan en rojo en la <a href="#carpetasDriv">Figura 7</a>.
+sobre las variables que se resaltan en rojo en la <a href="#carpetasDriv">Figura 9</a>.
 
    
  <a name="carpetasDriv">![Asignación de identificadores de carpeta en BgpRS](IMG/CAP7/Carpetas_gDrive_bgpRS.PNG)<br>
