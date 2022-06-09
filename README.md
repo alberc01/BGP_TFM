@@ -1,10 +1,7 @@
-# BGP_TFM
+# Sistema de recomendación de políticas de tráfico BGP
 
 Resumen
 ============
-
-**Sistema de recomendación de políticas de tráfico BGP**
-
 Las tecnologías de la información y comunicación son áreas de investigación en constante crecimiento. Los numerosos avances del sector proporcionan herramientas para acceder a una gran variedad de información y servicios desde cualquier parte del mundo. Estas herramientas se podrían resumir en una única palabra, Internet.
 
 Internet es una herramienta de carácter global cuyo funcionamiento es posible gracias a complejos mecanismos y protocolos desarrollados a lo largo de la historia. Cada uno de estos mecanismos se encarga de gestionar una característica concreta, siendo BGP (*Border Gateway Protocol*) uno de los protocolos más relevantes sobre los que se sostiene Internet. Sin embargo, este protocolo que se encarga del intercambio de información de encaminamiento global, es gestionado y configurado de manera local por los diferentes ISP (*Internet Service Provider*), empresas tecnológicas, universidades, agencias gubernamentales e instituciones científicas. Esto hace que los intereses particulares de algunas entidades intervengan en el encaminamiento del tráfico de red, causando en ocasiones ciertos problemas.
@@ -17,7 +14,6 @@ BGP (*Border Gateway Protocol*), AS (*Autonomous System*), *Outages*, *Hijacks*,
 
 Puesta en marcha de la aplicación
 =================================
-
 Dentro de este proyecto se encuentra la carpeta denominada
 `/dependencies_installation_dir` que contiene el archivo
 `requirements.txt` con la información de las dependencias necesarias.
