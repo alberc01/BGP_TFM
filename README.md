@@ -72,29 +72,37 @@ será necesario el intercambio de cierta cantidad de *e-mails*.
 Una ver realizado todo esto, sera posible crear un proyecto con el fin
 de poder dar acceso a los servicios a la aplicación BgpRS. Si todo el
 proceso se ha realizado correctamente, el nuevo perfil de *Twitter
-Developer* se asemejará al representado en la siguiente figura.
+Developer* se asemejará al representado en la <a href="#credenAcc">Figura 1</.
 
-![Permisos *Academic Research* en Twitter, *fuente:
-<https://developer.twitter.com/en/portal/products>*[]{label="fig:twitDevACC"}](IMG/CAP7/academic_research_plan.PNG)
+<a name="academicRese">![Permisos *Academic Research* en Twitter, *fuente:
+<https://developer.twitter.com/en/portal/products>*]
+(IMG/CAP7/academic_research_plan.PNG) Permisos *Academic Research* en Twitter, *fuente:
+<https://developer.twitter.com/en/portal/products>*</a>
+
 ### Asignación de credenciales dentro de BgpRS
 
 Una vez obtenido el acceso al plan *Academic Research*, será posible
 obtener las credenciales necesarias para que TweePy [@tweepy] pueda
 ejecutar las solicitudes de BgpRS. El acceso a estas credenciales y su
 lectura se puede realizar a través del portal *developer* de Twitter tal
-y como se representa en la siguiente figura.
+y como se representa en la <a href="#credenAcc">Figura 2</a>.
 
-![Acceso a credenciales de Twitter, *fuente:
-<https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*[]{label="fig:twitDevACC"}](IMG/CAP7/Credenciales_Twitter_web.PNG)
+
+
+<a name="credenAcc">![Acceso a credenciales de Twitter, *fuente:
+<https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*](IMG/CAP7/Credenciales_Twitter_web.PNG)Acceso a credenciales de Twitter, *fuente:
+<https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*</a>
 
 Con estas credenciales en nuestra posesión, ya solo se necesita
 especificar su valor dentro del código de BgpRS. Esto se debe realizar
 mediante la modificación del archivo `twitterDevCredentials.py` situado
 en la carpeta `/API_classes`, asignando valor a cada una de las
-variables mostradas en la siguiente figura.
+variables mostradas en la <a href="#credenTwit">Figura 3</a>.
 
-![Archivo en BgpRS para introducir las credenciales de
-Twitter[]{label="fig:twitDevACC"}](IMG/CAP7/Credenciales_Twitter.PNG)
+<a name="credenTwit">![Archivo en BgpRS para introducir las credenciales de
+Twitter](IMG/CAP7/Credenciales_Twitter.PNG) Archivo en BgpRS para introducir las credenciales de
+Twitter</a>
+
 
 Una vez realizados todos estos pasos, la aplicación será capaz de
 obtener y actualizar la información de eventos BGP identificados por
@@ -114,10 +122,13 @@ Gmail y acceder a la consola de *Google Cloud Platform* [^2]. A través
 de esta consola, se podrá crear un proyecto para posteriormente activar
 el servicio correspondiente de Google Drive.
 
-![Credenciales de Google Drive, *fuente:
-<https://console.cloud.google.com/apis/credentials?authuser=1&project=phrasal-clover-312717>*[]{label="fig:credenGdriveP1"}](IMG/CAP7/Credenciales_gdrive.png)
+<a name="credenDrive">![Credenciales de Google Drive, *fuente:
+<https://console.cloud.google.com/apis/credentials?authuser=1&project=phrasal-clover-312717>*](IMG/CAP7/Credenciales_gdrive.png)Credenciales de Google Drive, *fuente:
+<https://console.cloud.google.com/apis/credentials?authuser=1&project=phrasal-clover-312717>*</a>
 
-En la figura anterior se representa el proceso para crear y
+
+
+En la <a href="#folderids">Figura 4</a> se representa el proceso para crear y
 obtener las credenciales necesarias para hacer uso de las
 funcionalidades de PyDrive [@pydrive]. En primer lugar, se deberá
 ingresar en el menú de `API y servicios`, y dentro de este, en el
@@ -157,12 +168,14 @@ realizar esta acción en las próximas ejecuciones.
 Con los pasos realizados anteriormente, ya solo es necesario crear una
 carpeta de Drive donde BgpRS almacenará y obtendrá la diferente
 información. Esta carpeta, deberá estar organizada de manera similar a
-la representada en la siguiente figura. El nombre de estas carpetas no tiene
+la representada en la <a href="#folderids">Figura 5</a> . El nombre de estas carpetas no tiene
 porque ser idéntico, ya que de estas, como se vera mas adelante, solo se
 utilizará el identificador de las mismas.
 
-![Distribución de carpetas en Google Drive, *fuente:
-<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*[]{label="fig:distribuGdrive"}](IMG/CAP7/Distribu_gdrive.PNG)
+<a name="distriDrive">![Distribución de carpetas en Google Drive, *fuente:
+<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*](IMG/CAP7/Distribu_gdrive.PNG)Distribución de carpetas en Google Drive, *fuente:
+<https://drive.google.com/drive/u/1/folders/1dwxWQoyJvVZeOto3X0QjDy3VhQ6jhmuL>*</a>
+
 
 El contenido de estas carpetas tiene diferente significado para BgpRS.
 Por un lado, la carpeta `/Scrapped_From_Twitter` contendrá el archivo
@@ -183,11 +196,12 @@ identificadores, ya que como se ha mencionado, la aplicación necesitara
 conocer su valor. Esta información se puede extraer del mismo navegador,
 ya que en la ultima parte de la *url* de cada una de estas carpetas se
 encuentra su identificador. El proceso de obtención de estos
-identificadores se puede observar en la figura
-[1.6](#fig:folderids).
+identificadores se puede observar en la <a href="#folderids">Figura 6</a>.
 
-![Obtención de identificadores de carpeta, *fuente:
-<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>*[]{label="fig:folderids"}](IMG/CAP7/Folder_ids_gdrive.PNG)[1.6](fig:folderids)
+<a name="folderids">![Obtención de identificadores de carpeta, *fuente:
+<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK>](IMG/CAP7/Folder_ids_gdrive.PNG)Obtención de identificadores de carpeta, *fuente:
+<https://drive.google.com/drive/u/1/folders/1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK></a>
+
 
 Una vez obtenidos cada uno de los identificadores, solo hace falta
 indicarlos en la parte correspondiente del código de BgpRS. Esta
