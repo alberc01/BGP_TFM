@@ -47,11 +47,9 @@ funcionamiento a la aplicación.
 Twitter API
 -----------
 
-Como se repetido en múltiples ocasiones, las información obtenida a
-través de la API de Twitter tiene enorme relevancia para BgpRS. Sin
-embargo, para que la aplicación pueda utilizar las funcionalidades de
-esta API, es necesario seguir ciertas directrices que se detallan a
-continuación.
+La información obtenida a través de la API de Twitter tiene enorme relevancia para BgpRS.
+Para que la aplicación utilice las funcionalidades de esta API,
+es necesario seguir las directrices que se detallan a continuación.
 
 En primer lugar, es necesario puntualizar que BgpRS utiliza funciones de
 esta API que solo están disponibles con los permisos que otorga el plan
@@ -87,7 +85,7 @@ y como se representa en la <a href="#credenAcc">Figura 2</a>.
 <https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*](IMG/CAP7/Credenciales_Twitter_web.PNG)Acceso a credenciales de Twitter, *fuente:
 <https://developer.twitter.com/en/portal/projects/1495420932801785863/apps/23448073/keys>*</a>
 
-Con estas credenciales en nuestra posesión, ya solo se necesita
+Con estas credenciales en posesión, ya solo se necesita
 especificar su valor dentro del código de BgpRS. Esto se debe realizar
 mediante la modificación del archivo `twitterDevCredentials.py` situado
 en la carpeta `/API_classes`, asignando valor a cada una de las
