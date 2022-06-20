@@ -204,11 +204,10 @@ class PR_BGP(BGP):
 ! Router section   \n\
 router bgp <YOUR ASN NUMBER> \n\
     ! <a.b.c.d> is the IP direction of the router BGP neighbour\n\
-    neighbor <a.b.c.d> remote_as " + asn.replace('AS','') + " !In case "+ asn.replace('AS','')+" was neighbour \n\
     ! For each neigbour \n\
     neighbor <a.b.c.d> route-map BgpRS_RM_" + asn.replace('AS','') + " in \n\
 ! Access-list declaration section \n\
-    !Filter to find all routes in AS_PATH where the AS problem causer is between \n\
+    !Filter to find all routes where the AS serves as transit \n\
 ip as-path access-list BgpRS_RECOM_" + asn.replace('AS','') + " permit "+ asn_filter+ "\n\
 ip as-path access-list Others_" + asn.replace('AS','') + " permit .* \n\
 ! Route-map declaration section \n\
@@ -222,16 +221,15 @@ route-map BgpRS_RM_" + asn.replace('AS','') + " permit 20 \n\
 
     def construct_vtysh_commands_hj(self, asn, pref):
         # El filtrado solo debe contemplar aquellos anuncios en los que el ASN es origen o final
-        asn_filter = asn.replace('AS','') + '$' # Rutas con origen en el ASN agresor
+        asn_filter = "_" + asn.replace('AS','') + '$' # Rutas con origen en el ASN agresor
         string = "\
 ! Router section   \n\
 router bgp <YOUR ASN NUMBER> \n\
     ! <a.b.c.d> is the IP direction of the router BGP neighbour\n\
-    neighbor <a.b.c.d> remote_as " + asn.replace('AS','') + " !In case "+ asn.replace('AS','')+" was neighbour\n\
     ! For each neigbour \n\
     neighbor <a.b.c.d> route-map BgpRS_RM_" + asn.replace('AS','') + " in \n\
 ! Access-list declaration section \n\
-    ! Filter to find all routes in AS_PATH where the AS problem is origin \n\
+    ! Filter to find all routes where the AS is origin \n\
 ip as-path access-list BgpRS_RECOM_" + asn.replace('AS','') + " permit "+ asn_filter + " \n\
 ip as-path access-list Others_" + asn.replace('AS','') + " permit .* \n\
 ! Route-map declaration section \n\
