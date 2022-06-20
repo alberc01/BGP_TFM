@@ -1,5 +1,5 @@
 from API_classes.GUI_class import Graphics
-from API_classes.Data_classifier_class import Data_clasffier
+# from API_classes.Data_classifier_class import Data_clasffier
 class Main():
     # Funcion para inciar el modo GUI de la aplicacion
     def init_GUI(self):
