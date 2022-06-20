@@ -14,7 +14,7 @@ class PR_BGP(BGP):
         for i in self.asn_data.keys():
             if i not in mainlist:
                 mainlist.append(str(i))
-        return mainlist
+        return sorted(mainlist, key= len, reverse=True)
         
     def add_to_selected_list(self, v):
         if (v != "") and (v not in self.selected_list):
