@@ -8,9 +8,9 @@ import json
 import datetime
 import pycountry
 
-Classified_By_BgpRS = "1pV892qsDAl28h7ivBVX3PqiMeF1oQmNK"
-Posible_Extended_Data = "1YH32QGzsjc8VAtnWxN2AjVSsFn5REfA7"    
-Scrapped_From_Twitter = "1YdjavmTBI8hORGZJ1zhuFnu_tYEkA33T"
+Classified_By_BgpRS = "Folder_id_Classified_By_BgpRS"
+Posible_Extended_Data = "Folder_id_Posible_Extended_Data"    
+Scrapped_From_Twitter = "Folder_id_Scrapped_From_Twitter"
 
 class Data_clasffier():
     # Constructora e la clase, inicializa apis y archivos para la obtencion de informacion
